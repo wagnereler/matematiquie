@@ -1,0 +1,13 @@
+{
+  "@@locale": "pt",
+  "appTitle": "Matematiquei",
+  "play": "Jogar",
+  "settings": "Configurações",
+  "stats": "Estatísticas",
+  "trainMistakes": "Treinar meus erros",
+  "chooseMode": "Escolha o modo",
+  "addition": "Adição",
+  "subtraction": "Subtração",
+  "multiplication": "Multiplicação",
+  "division": "Divisão"
+}

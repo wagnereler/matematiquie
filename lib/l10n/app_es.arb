@@ -1,0 +1,13 @@
+{
+  "@@locale": "es",
+  "appTitle": "MathShow",
+  "play": "Jugar",
+  "settings": "Configuración",
+  "stats": "Estadísticas",
+  "trainMistakes": "Entrenar mis errores",
+  "chooseMode": "Elige el modo",
+  "addition": "Suma",
+  "subtraction": "Resta",
+  "multiplication": "Multiplicación",
+  "division": "División"
+}
