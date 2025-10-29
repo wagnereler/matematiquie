@@ -2,20 +2,21 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePrefs {
-  static const _keyActivePlayerId = 'active_player_id';
+  final SharedPreferences _prefs;
+  ProfilePrefs(this._prefs);
 
-  final SharedPreferences prefs;
-  ProfilePrefs(this.prefs);
+  static const _kActivePlayerId = 'active_player_id';
 
   int? getActivePlayerId() {
-    return prefs.getInt(_keyActivePlayerId);
+    final v = _prefs.getInt(_kActivePlayerId);
+    return v;
   }
 
   Future<void> setActivePlayerId(int id) async {
-    await prefs.setInt(_keyActivePlayerId, id);
+    await _prefs.setInt(_kActivePlayerId, id);
   }
 
   Future<void> clearActivePlayerId() async {
-    await prefs.remove(_keyActivePlayerId);
+    await _prefs.remove(_kActivePlayerId);
   }
 }

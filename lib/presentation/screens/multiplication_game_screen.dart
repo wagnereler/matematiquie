@@ -1,6 +1,5 @@
 // lib/presentation/screens/multiplication_game_screen.dart
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -14,11 +13,19 @@ import '../../domain/attempts_repository.dart';
 import '../../domain/player.dart';
 
 class MultiplicationGameScreen extends StatefulWidget {
-  final String tableParam; // "7" ou "random_2_10"
+  /// pode ser:
+  ///  - "7"                -> tabuada fixa do 7
+  ///  - "random_2_10"      -> tabuada aleatória entre 2 e 10
+  ///  - "errors"           -> treinar operações que o jogador mais errou
+  final String tableParam;
+
+  /// repositório para salvar tentativas e consultar estatísticas
+  final AttemptsRepository attemptsRepo;
 
   const MultiplicationGameScreen({
     super.key,
     required this.tableParam,
+    required this.attemptsRepo,
   });
 
   @override
@@ -27,37 +34,28 @@ class MultiplicationGameScreen extends StatefulWidget {
 }
 
 class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
+  // serviço que gera perguntas, opções, dicas e calcula tempo por nível
   final _service = MultiplicationService();
 
-  // jogador ativo
+  // jogador ativo (id, nível, dicas etc.)
   int? _playerId;
-  int _hintsLeft = 5; // sincronizado com jogador ativo
+  int _hintsLeft = 5;
   late final int _totalSecondsPerQuestion;
-  late final AttemptsRepository _attemptsRepo;
 
   // rodada
   static const int _roundMax = 10;
   int _questionsAnswered = 0;
   final List<RoundAttempt> _roundAttempts = [];
 
-  // modo/tabuada atual
-  late final bool _isRandomRange;
-  late final int _fixedTable;
-  late final int _randMin;
-  late final int _randMax;
-  late final String _replayParam;
-
-  int _currentTableShown = 2;
+  // placar
+  int _scoreCorrect = 0;
+  int _scoreTotal = 0;
 
   // cronômetro
   Timer? _timer;
   int _remainingSeconds = 0;
 
-  // placar
-  int _scoreCorrect = 0;
-  int _scoreTotal = 0;
-
-  // pergunta atual (agora pode ser nula até a 1ª pergunta estar pronta)
+  // pergunta atual
   MathQuestion? _currentQuestion;
 
   // estado visual da pergunta atual
@@ -65,15 +63,65 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
   bool _wasCorrect = false;
   int? _selectedOption;
 
-  // ---------------------------------
-  // Setup de parâmetros de tabuada
-  // ---------------------------------
-  void _parseTableParam() {
+  // -------------------------------------------------
+  // sobre o "modo" da rodada
+  // -------------------------------------------------
+  //
+  // Caso 1: tabuada fixa (ex: "7")
+  late bool _isFixedTable;
+  late int _fixedTable;
+
+  // Caso 2: aleatório em faixa (ex: "random_2_10")
+  late bool _isRandomRange;
+  int _randMin = 2;
+  int _randMax = 10;
+
+  // Caso 3: foco em erros ("errors")
+  late bool _isErrorsMode;
+  // lista de pares (a,b) => conta direta "a × b"
+  // se isso estiver preenchido, vamos tentar priorizar esses pares
+  List<(int, int)> _focusPairs = [];
+  int _focusIndex = 0;
+
+  // só usamos isso para montar o título e para "jogar novamente"
+  late String _replayParam;
+
+  // tabuada "visualmente mostrada" no título ("Tabuada do X")
+  // Observação: em modos aleatórios/erros, isso atualiza a cada pergunta.
+  int _currentTableShown = 2;
+
+  // -------------------------------------------------
+  // Parse inicial do parâmetro recebido pela rota
+  // -------------------------------------------------
+  Future<void> _parseTableParamAndMaybeLoadFocusPairs() async {
     final raw = widget.tableParam;
+
+    // reset flags
+    _isFixedTable = false;
+    _isRandomRange = false;
+    _isErrorsMode = false;
+
+    if (raw == 'errors') {
+      // modo especial: treinar contas que mais errou
+      _isErrorsMode = true;
+      _replayParam = 'errors';
+
+      // vamos buscar pares errados do jogador ativo
+      if (_playerId != null) {
+        final pairs = await widget.attemptsRepo.getWorstPairsForPlayer(
+          _playerId!,
+          limit: 20,
+        );
+        _focusPairs = pairs;
+      }
+      return;
+    }
 
     if (raw.startsWith('random')) {
       _isRandomRange = true;
+      _replayParam = raw;
 
+      // exemplo: "random_2_10"
       final parts = raw.split('_'); // ["random","2","10"]
       if (parts.length >= 3) {
         _randMin = int.tryParse(parts[1]) ?? 2;
@@ -82,29 +130,24 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
         _randMin = 2;
         _randMax = 10;
       }
-
-      _fixedTable = 2;
-      _replayParam = "random_${_randMin}_${_randMax}";
-    } else {
-      _isRandomRange = false;
-      _randMin = 2;
-      _randMax = 10;
-
-      _fixedTable = int.tryParse(raw) ?? 2;
-      if (_fixedTable < 2) _fixedTable = 2;
-
-      _replayParam = _fixedTable.toString();
+      return;
     }
+
+    // senão, tentamos parsear número fixo
+    _isFixedTable = true;
+    _fixedTable = int.tryParse(raw) ?? 2;
+    if (_fixedTable < 2) _fixedTable = 2;
+    _replayParam = _fixedTable.toString();
   }
 
-  // ---------------------------------
-  // Timer de cada pergunta
-  // ---------------------------------
-  void _startTimer({int? startSeconds}) {
+  // -------------------------------------------------
+  // Timer
+  // -------------------------------------------------
+  void _startTimer({int? resumeFrom}) {
     _timer?.cancel();
-    // se startSeconds vier, retomamos daquele ponto;
-    // se não vier, começamos do total padrão
-    _remainingSeconds = startSeconds ?? _totalSecondsPerQuestion;
+
+    _remainingSeconds =
+        resumeFrom ?? _totalSecondsPerQuestion; // começa cheio ou retoma
 
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (!mounted) {
@@ -123,42 +166,82 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     });
   }
 
-  // ---------------------------------
-  // Geração da próxima pergunta
-  // ---------------------------------
-  void _prepareNextQuestion() {
-    // já terminou 10 perguntas?
+  // -------------------------------------------------
+  // geração da próxima questão de acordo com o modo
+  // -------------------------------------------------
+  MathQuestion _makeQuestion() {
+    // 1. modo erros?
+    if (_isErrorsMode && _focusPairs.isNotEmpty) {
+      // pega par atual
+      final pair = _focusPairs[_focusIndex % _focusPairs.length];
+      _focusIndex++;
+      final a = pair.$1;
+      final b = pair.$2;
+
+      // pra consistência com os outros modos, usamos generateQuestion(table:b)
+      // mas aqui queremos exatamente (a × b),
+      // então vamos montar manualmente o MathQuestion.
+      final correct = a * b;
+      final options = _service.generateOptionsFor(correct);
+
+      _currentTableShown = b;
+
+      return MathQuestion(
+        a: a,
+        b: b,
+        correctAnswer: correct,
+        options: options,
+        questionText: "$a × $b = ?",
+      );
+    }
+
+    // 2. modo faixa aleatória
+    if (_isRandomRange) {
+      // escolhe uma tabuada base
+      final tableNow = _service.pickRandomTable(
+        minBase: _randMin,
+        maxBase: _randMax,
+      );
+      _currentTableShown = tableNow;
+
+      // gera pergunta padrão: fator aleatório × tableNow
+      return _service.generateQuestion(
+        table: tableNow,
+        maxFactor: 10,
+      );
+    }
+
+    // 3. tabuada fixa
+    _currentTableShown = _fixedTable;
+    return _service.generateQuestion(
+      table: _fixedTable,
+      maxFactor: 10,
+    );
+  }
+
+  Future<void> _prepareNextQuestion() async {
     if (_questionsAnswered >= _roundMax) {
-      _finishRound(); // navega para tela final
+      await _finishRound();
       return;
     }
 
-    final tableNow = _isRandomRange
-        ? _service.pickRandomTable(minBase: _randMin, maxBase: _randMax)
-        : _fixedTable;
-
-    final nextQ = _service.generateQuestion(
-      table: tableNow,
-      maxFactor: 10,
-    );
+    final q = _makeQuestion();
 
     _timer?.cancel();
 
     setState(() {
-      _currentTableShown = tableNow;
-      _currentQuestion = nextQ;
-
+      _currentQuestion = q;
       _answered = false;
       _wasCorrect = false;
       _selectedOption = null;
     });
 
-    _startTimer(); // reinicia tempo cheio pra nova pergunta
+    _startTimer();
   }
 
-  // ---------------------------------
-  // Registro de tentativa no banco
-  // ---------------------------------
+  // -------------------------------------------------
+  // salvar tentativa no banco e atualizar placar interno
+  // -------------------------------------------------
   Future<void> _recordAttempt({
     required int? selectedAnswer,
     required bool isCorrect,
@@ -168,6 +251,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     _scoreTotal += 1;
     if (isCorrect) _scoreCorrect += 1;
 
+    // manter no resumo da rodada
     _roundAttempts.add(
       RoundAttempt(
         questionText: q.questionText,
@@ -179,13 +263,14 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
       ),
     );
 
+    // persistir no banco
     if (_playerId != null) {
-      await _attemptsRepo.logAttempt(
+      await widget.attemptsRepo.logAttempt(
         playerId: _playerId!,
         mode: 'mul',
         factorA: q.a,
         factorB: q.b,
-        tableBase: _currentTableShown,
+        tableBase: q.b, // tabuada base é o segundo fator
         correctAnswer: q.correctAnswer,
         selectedAnswer: selectedAnswer,
         isCorrect: isCorrect,
@@ -194,25 +279,23 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     }
   }
 
-  // ---------------------------------
-  // Consumir dica (durante o jogo)
-  // e exibir explicação pedagógica
-  // ---------------------------------
+  // -------------------------------------------------
+  // consumir (ou não) dica pedagógica
+  // -------------------------------------------------
   Future<void> _showHintSheet({
     required bool consumeHint,
     required bool showContinueButton,
   }) async {
     final q = _currentQuestion;
-    if (q == null) return; // segurança extra
+    if (q == null) return;
 
-    // Se for durante o jogo (consumeHint=true), pausamos o timer.
     int? resumeAfter;
     if (consumeHint && !_answered) {
+      // pausa timer
       resumeAfter = _remainingSeconds;
       _timer?.cancel();
     }
 
-    // Se for consumir, checa estoque
     if (consumeHint) {
       if (_hintsLeft <= 0) {
         if (mounted) {
@@ -222,14 +305,14 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
             ),
           );
         }
-        // se não tem dica, e a gente pausou por engano, retoma
+        // se pausou à toa, retoma
         if (resumeAfter != null && mounted && !_answered) {
-          _startTimer(startSeconds: resumeAfter);
+          _startTimer(resumeFrom: resumeAfter);
         }
         return;
       }
 
-      // desconta 1 dica e persiste no jogador
+      // desconta 1 dica e salva no jogador
       setState(() {
         _hintsLeft -= 1;
       });
@@ -293,19 +376,15 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
       },
     );
 
-    // Retomar timer só se:
-    // - era uma dica de jogo (consumeHint == true)
-    // - ainda não respondeu
-    // - ainda estamos na mesma pergunta
+    // retomar timer se for dica durante a pergunta
     if (consumeHint && resumeAfter != null && mounted && !_answered) {
-      _startTimer(startSeconds: resumeAfter);
+      _startTimer(resumeFrom: resumeAfter);
     }
   }
 
-  // ---------------------------------
-  // Quando o tempo acaba (não respondeu)
-  // -> erro, pausa jogo
-  // ---------------------------------
+  // -------------------------------------------------
+  // jogador não respondeu em tempo
+  // -------------------------------------------------
   Future<void> _handleTimeout() async {
     final q = _currentQuestion!;
     setState(() {
@@ -322,11 +401,11 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     await _pauseAfterWrong(q);
   }
 
-  // ---------------------------------
-  // Jogador escolheu uma resposta
-  // ---------------------------------
+  // -------------------------------------------------
+  // jogador escolheu uma alternativa
+  // -------------------------------------------------
   Future<void> _selectAnswer(int value) async {
-    if (_answered) return;
+    if (_answered) return; // ignora toques depois de respondido
     _timer?.cancel();
 
     final q = _currentQuestion!;
@@ -344,21 +423,20 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     );
 
     if (isRight) {
-      // se acertou, só dá feedback rápido e continua
+      // se acertou: feedback rápido e próxima pergunta
       Future.delayed(const Duration(milliseconds: 600), () {
         if (!mounted) return;
         _prepareNextQuestion();
       });
     } else {
-      // se errou, pausa o jogo e ensina
+      // se errou: pausa pedagógica
       await _pauseAfterWrong(q);
     }
   }
 
-  // ---------------------------------
+  // -------------------------------------------------
   // Pausa pedagógica quando erra
-  // Mostra resposta correta + oferece "Ver dica" ou "Continuar"
-  // ---------------------------------
+  // -------------------------------------------------
   Future<void> _pauseAfterWrong(MathQuestion q) async {
     final a = q.a;
     final b = q.b;
@@ -409,25 +487,22 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     }
   }
 
-  // ---------------------------------
-  // Final da rodada (10 questões)
-  // Atualiza roundsPlayed, recompensa dica a cada 5 rodadas
-  // e vai pra tela de resultado
-  // ---------------------------------
+  // -------------------------------------------------
+  // fim da rodada
+  // -------------------------------------------------
   Future<void> _finishRound() async {
     _timer?.cancel();
 
     final summary = RoundSummary(attempts: _roundAttempts);
 
-    // atualiza progresso do jogador (rodadas jogadas, reposição de dica)
+    // atualizar progresso do jogador
     final cubit = context.read<PlayersCubit>();
     final Player? p = cubit.state.activePlayer;
-
     if (p != null) {
       int newRounds = p.roundsPlayed + 1;
       int newHints = _hintsLeft;
 
-      // recompensa: a cada 5 rodadas completas, +1 dica (até máximo 5)
+      // recompensa: a cada 5 rodadas completas, +1 dica (máx 5)
       if (newRounds % 5 == 0 && newHints < 5) {
         newHints += 1;
         if (newHints > 5) newHints = 5;
@@ -437,7 +512,6 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
         roundsPlayed: newRounds,
         hintsAvailable: newHints,
       );
-
       await cubit.updatePlayer(updated);
     }
 
@@ -452,9 +526,9 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     );
   }
 
-  // ---------------------------------
-  // Aparência dos botões de opção
-  // ---------------------------------
+  // -------------------------------------------------
+  // UI helpers
+  // -------------------------------------------------
   Color _buttonColor(int opt) {
     final q = _currentQuestion;
     if (q == null) {
@@ -505,7 +579,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     return v.clamp(0.0, 1.0);
   }
 
-  // Botão de dica no AppBar com contador e pausa automática
+  // botão de dica (💡) no app bar com contador
   Widget _buildHintAction() {
     return SizedBox(
       width: 48,
@@ -519,7 +593,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
             onPressed: _hintsLeft > 0
                 ? () {
                     _showHintSheet(
-                      consumeHint: true, // gasta dica
+                      consumeHint: true,
                       showContinueButton: false,
                     );
                   }
@@ -546,9 +620,50 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     );
   }
 
-  // ---------------------------------
-  // Ciclo de vida
-  // ---------------------------------
+  // botão de cancelar partida no app bar
+  Widget _buildCancelAction() {
+    return IconButton(
+      tooltip: 'Sair',
+      icon: const Icon(Icons.close),
+      onPressed: () async {
+        _timer?.cancel();
+
+        final reallyQuit = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text("Encerrar treino?"),
+            content: const Text(
+              "Se você sair agora, essa rodada vai terminar antes das 10 questões.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text("Continuar jogando"),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text("Sair"),
+              ),
+            ],
+          ),
+        );
+
+        if (reallyQuit == true && mounted) {
+          // volta pra tela de escolha de tabuada
+          context.go('/train/multiplication/select');
+        } else {
+          // retoma timer se ainda não tinha respondido
+          if (mounted && !_answered) {
+            _startTimer(resumeFrom: _remainingSeconds);
+          }
+        }
+      },
+    );
+  }
+
+  // -------------------------------------------------
+  // ciclo de vida
+  // -------------------------------------------------
   @override
   void initState() {
     super.initState();
@@ -560,21 +675,16 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     final difficulty = active?.difficultyMax ?? 5;
     _totalSecondsPerQuestion = _service.secondsForDifficulty(difficulty);
 
-    _attemptsRepo = context.read<AttemptsRepository>();
+    // parse do modo (isso também pode carregar erros)
+    _parseTableParamAndMaybeLoadFocusPairs().then((_) {
+      if (!mounted) return;
+      // primeira pergunta
+      _questionsAnswered = 0;
+      _roundAttempts.clear();
+      _scoreCorrect = 0;
+      _scoreTotal = 0;
 
-    _parseTableParam();
-
-    _questionsAnswered = 0;
-    _roundAttempts.clear();
-    _scoreCorrect = 0;
-    _scoreTotal = 0;
-
-    // _currentQuestion começa null e build mostra loading.
-    // Depois do primeiro frame a gente gera a primeira pergunta.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _prepareNextQuestion();
-      }
+      _prepareNextQuestion();
     });
   }
 
@@ -584,23 +694,27 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     super.dispose();
   }
 
-  // ---------------------------------
-  // UI principal
-  // ---------------------------------
+  // -------------------------------------------------
+  // build
+  // -------------------------------------------------
   @override
   Widget build(BuildContext context) {
     final q = _currentQuestion;
 
-    // Enquanto não temos pergunta gerada ainda, mostra um loading leve
+    final appBarTitle = "Tabuada do $_currentTableShown "
+        "(${_questionsAnswered + 1} / $_roundMax)";
+
+    // Se ainda não geramos a 1ª pergunta (q == null), mostra loading
     if (q == null) {
       return Scaffold(
         appBar: AppBar(
           leading: BackButton(
-            onPressed: () => context.pop(),
+            onPressed: () => context.go('/train/multiplication/select'),
           ),
-          title: const Text("Carregando..."),
+          title: Text(appBarTitle),
           actions: [
             _buildHintAction(),
+            _buildCancelAction(),
           ],
         ),
         body: const Center(child: CircularProgressIndicator()),
@@ -612,14 +726,12 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () => context.pop(),
+          onPressed: () => context.go('/train/multiplication/select'),
         ),
-        title: Text(
-          "Tabuada do $_currentTableShown "
-          "(${_questionsAnswered + 1} / $_roundMax)",
-        ),
+        title: Text(appBarTitle),
         actions: [
           _buildHintAction(),
+          _buildCancelAction(),
         ],
       ),
       body: Padding(
