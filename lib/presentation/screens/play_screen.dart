@@ -26,8 +26,7 @@ class PlayScreen extends StatelessWidget {
                 backgroundColor: Colors.amber.shade600,
                 foregroundColor: Colors.black,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                textStyle: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               onPressed: () => context.go('/train/multiplication/select'),
               child: const Text("Tabuada (×)"),

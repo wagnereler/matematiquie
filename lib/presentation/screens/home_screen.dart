@@ -60,7 +60,6 @@ class HomeScreen extends StatelessWidget {
         ? "Dicas: ${activePlayer.hintsAvailable}/5"
         : "";
 
-    // texto abaixo dos botões
     final footerMessage = activePlayer != null
         ? "Pratique todos os dias um pouquinho.\nComece devagar, priorize o acerto 😊"
         : "Crie ou ative um jogador para salvar progresso.\nCada jogador tem nível e dicas próprias 😉";
@@ -79,19 +78,17 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Colors.black,
         centerTitle: true,
       ),
-      backgroundColor: const Color(0xFFFFF8E6), // tom clarinho amarelo/bege
+      backgroundColor: const Color(0xFFFFF8E6),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // --- BLOCO DO JOGADOR ATIVO + BOTÃO TROCAR ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // infos do jogador (mantemos o mesmo estilo centralizado do print)
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,72 +118,46 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // botão de trocar/cadastrar jogador
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       side: const BorderSide(color: Colors.black45),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                       foregroundColor: Colors.black87,
                     ),
-                    onPressed: () {
-                      // abre a tela de seleção/cadastro de jogador
-                      context.go('/players');
-                    },
-                    child: Text(
-                      activePlayer != null
-                          ? "Trocar"
-                          : "Escolher / Cadastrar",
-                    ),
+                    onPressed: () => context.go('/players'),
+                    child: Text(activePlayer != null ? "Trocar" : "Escolher / Cadastrar"),
                   ),
                 ],
               ),
 
               const SizedBox(height: 32),
 
-              // --- BOTÃO TREINAR ---
+              // **AQUI**: apenas trocado para /play
               _bigButton(
                 icon: Icons.play_arrow_rounded,
                 label: "Treinar",
                 background: Colors.amber.shade600,
                 foreground: Colors.black,
-                onTap: () {
-                  context.go('/train/multiplication/select');
-                },
+                onTap: () => context.go('/play'),
               ),
 
               const SizedBox(height: 16),
 
-              // --- BOTÃO ESTATÍSTICAS ---
               _bigButton(
                 icon: Icons.bar_chart_rounded,
                 label: "Estatísticas",
                 background: const Color(0xFF3A3F45),
                 foreground: Colors.white,
-                onTap: () {
-                  context.go('/stats');
-                },
+                onTap: () => context.go('/stats'),
               ),
 
               const SizedBox(height: 32),
-
               Text(
                 footerMessage,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.4,
-                  color: Colors.black54,
-                ),
+                style: const TextStyle(fontSize: 13, height: 1.4, color: Colors.black54),
               ),
             ],
           ),

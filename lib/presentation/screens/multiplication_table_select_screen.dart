@@ -25,26 +25,16 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
         );
         return;
       }
-
-      final pairs = await attemptsRepo.getWorstPairsForPlayer(
-        activePlayer.id,
-        limit: 10,
-      );
-
+      final pairs = await attemptsRepo.getWorstPairsForPlayer(activePlayer.id, limit: 10);
       if (pairs.isEmpty) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Ainda não temos erros suficientes.\nJogue algumas rodadas primeiro 😉"),
-            ),
+            const SnackBar(content: Text("Ainda não temos erros suficientes.\nJogue algumas rodadas primeiro 😉")),
           );
         }
         return;
       }
-
-      if (context.mounted) {
-        context.go('/train/multiplication/play?table=errors');
-      }
+      if (context.mounted) context.go('/train/multiplication/play?table=errors');
     }
 
     Future<void> _goRandom() async {
@@ -72,9 +62,8 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Center(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // centraliza verticalmente
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Linha 1: 2 3 4
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -86,8 +75,6 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 12),
-
-                    // Linha 2: 5 6 7
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -99,8 +86,6 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 12),
-
-                    // Linha 3: 8 9 Erros
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -113,24 +98,24 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // Linha 4: Aleatório ocupando de [8] até [Erros]
+                    // Aleatório expandido — usando EMOJI 🎲 (sem Icon)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 80), // placeholder largura do [8]
-                          const SizedBox(width: 12),  // espaço entre colunas
+                          const SizedBox(width: 80),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: _TableButton(
                               topText: "🎲",
                               bottomText: "Aleatório",
                               onTap: _goRandom,
-                              expanded: true, // <-- deixa ocupar todo espaço disponível
+                              expanded: true,
                             ),
                           ),
-                          const SizedBox(width: 12),  // espaço entre colunas
-                          const SizedBox(width: 80), // placeholder largura do [Erros]
+                          const SizedBox(width: 12),
+                          const SizedBox(width: 80),
                         ],
                       ),
                     ),
@@ -158,12 +143,11 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
   }
 }
 
-/// botão 80x80 (ou “expandido” horizontalmente) com topo grande e legenda embaixo
 class _TableButton extends StatelessWidget {
   final String topText;
   final String bottomText;
   final VoidCallback onTap;
-  final bool expanded; // quando true, ocupa toda a largura disponível
+  final bool expanded;
 
   const _TableButton({
     super.key,
@@ -179,9 +163,7 @@ class _TableButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.amber.shade600,
         foregroundColor: Colors.black,
-        minimumSize: expanded
-            ? const Size.fromHeight(80) // altura 80, largura cresce via Row/Expanded
-            : const Size(80, 80),
+        minimumSize: expanded ? const Size.fromHeight(80) : const Size(80, 80),
         padding: const EdgeInsets.all(6),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -194,10 +176,7 @@ class _TableButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            topText,
-            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          ),
+          Text(topText, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
           Text(
             bottomText,
@@ -208,15 +187,10 @@ class _TableButton extends StatelessWidget {
       ),
     );
 
-    // Se expandido, não fixa largura; caso contrário, 80x80
-    return expanded
-        ? SizedBox(height: 80, child: btn)
-        : SizedBox(width: 80, height: 80, child: btn);
+    return expanded ? SizedBox(height: 80, child: btn) : SizedBox(width: 80, height: 80, child: btn);
   }
 }
 
-/// Pede o intervalo para o treino Aleatório.
-/// Retorna (minBase, maxBase) ou null se cancelar.
 Future<(int, int)?> _askRandomRangeDialog(BuildContext context) async {
   final minCtrl = TextEditingController(text: "2");
   final maxCtrl = TextEditingController(text: "10");
