@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:math_lite/l10n/l10n.dart';
 import '../../application/players_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -52,23 +52,21 @@ class HomeScreen extends StatelessWidget {
     final playersState = context.watch<PlayersCubit>().state;
     final activePlayer = playersState.activePlayer;
 
-    final playerName = activePlayer?.name ?? "Nenhum jogador ativo";
+    final playerName = activePlayer?.name ?? '—';
     final playerLevel = activePlayer != null
-        ? "Nível: ${activePlayer.difficultyMax}"
-        : "Escolha um jogador";
+        ? "${context.l10n.home_level}: ${activePlayer.difficultyMax}"
+        : context.l10n.players_title;
     final playerHints = activePlayer != null
-        ? "Dicas: ${activePlayer.hintsAvailable}/5"
+        ? "${context.l10n.home_hints}: ${activePlayer.hintsAvailable}/5"
         : "";
 
-    final footerMessage = activePlayer != null
-        ? "Pratique todos os dias um pouquinho.\nComece devagar, priorize o acerto 😊"
-        : "Crie ou ative um jogador para salvar progresso.\nCada jogador tem nível e dicas próprias 😉";
+    final footerMessage = context.l10n.home_choose_player_hint;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Matematiquei",
-          style: TextStyle(
+        title: Text(
+          context.l10n.appTitle,
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: Colors.black,
@@ -94,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Jogador: $playerName",
+                          "${context.l10n.home_player}: $playerName",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 16,
@@ -127,7 +125,11 @@ class HomeScreen extends StatelessWidget {
                       foregroundColor: Colors.black87,
                     ),
                     onPressed: () => context.go('/players'),
-                    child: Text(activePlayer != null ? "Trocar" : "Escolher / Cadastrar"),
+                    child: Text(
+                      activePlayer != null
+                          ? context.l10n.btn_switch
+                          : context.l10n.home_changeOrAdd,
+                    ),
                   ),
                 ],
               ),
@@ -137,7 +139,7 @@ class HomeScreen extends StatelessWidget {
               // **AQUI**: apenas trocado para /play
               _bigButton(
                 icon: Icons.play_arrow_rounded,
-                label: "Treinar",
+                label: context.l10n.home_play,
                 background: Colors.amber.shade600,
                 foreground: Colors.black,
                 onTap: () => context.go('/play'),
@@ -147,7 +149,7 @@ class HomeScreen extends StatelessWidget {
 
               _bigButton(
                 icon: Icons.bar_chart_rounded,
-                label: "Estatísticas",
+                label: context.l10n.home_stats,
                 background: const Color(0xFF3A3F45),
                 foreground: Colors.white,
                 onTap: () => context.go('/stats'),

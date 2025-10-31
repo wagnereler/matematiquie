@@ -1,24 +1,27 @@
 // lib/presentation/screens/play_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:math_lite/l10n/l10n.dart';
 
 class PlayScreen extends StatelessWidget {
   const PlayScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(onPressed: () => context.go('/')),
-        title: const Text('Treinar'),
+        title: Text(l10n.play_title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            const Text(
-              "Escolha o tipo de treino:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            Text(
+              l10n.play_chooseType,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -29,7 +32,7 @@ class PlayScreen extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               onPressed: () => context.go('/train/multiplication/select'),
-              child: const Text("Tabuada (×)"),
+              child: Text(l10n.play_multiplication),
             ),
           ],
         ),

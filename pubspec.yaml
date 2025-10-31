@@ -1,3 +1,4 @@
+# /pubspec.yaml
 name: math_lite
 description: App de alfabetização matemática (PT/EN/ES) offline
 
@@ -33,6 +34,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/app_icon.png
+  generate: true   # habilita o gen_l10n (usa os padrões)
 
 # Configuração do gerador de ícones
 flutter_launcher_icons:

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:math_lite/l10n/l10n.dart';
 import '../../application/players_cubit.dart';
 import '../../domain/math_question.dart';
 import '../../domain/round_attempt.dart';
@@ -300,9 +300,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
       if (_hintsLeft <= 0) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Você não tem mais dicas disponíveis."),
-            ),
+            SnackBar(content: Text(context.l10n.no_hints_left)),
           );
         }
         // se pausou à toa, retoma
@@ -325,7 +323,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
       }
     }
 
-    final hintText = _service.buildHint(q);
+    final hintText = _service.buildHint(context, q);
 
     await showModalBottomSheet<void>(
       context: context,
@@ -339,9 +337,9 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    "Como pensar nessa conta:",
-                    style: TextStyle(
+                  Text(
+                    context.l10n.howto_title,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
                     ),
@@ -366,8 +364,12 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
                       ),
                     ),
                     onPressed: () => Navigator.of(ctx).pop(),
-                    child: Text(showContinueButton ? "Continuar" : "Fechar"),
-                  ),
+                    child: Text(
+                      showContinueButton
+                          ? context.l10n.btn_continue
+                          : context.l10n.btn_close,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -447,16 +449,14 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
       barrierDismissible: false,
       builder: (ctx) {
         return AlertDialog(
-          title: const Text("Resposta incorreta"),
-          content: Text(
-            "A resposta correta é $correct porque $a × $b = $correct.\n\n"
-            "Quer ver como chegar nesse resultado passo a passo?",
+          title: Text(context.l10n.wrong_title),
+          content: Text(context.l10n.wrong_explain_fmt(a, b, correct),
             style: const TextStyle(fontSize: 16, height: 1.4),
           ),
           actions: [
             TextButton.icon(
               icon: const Icon(Icons.lightbulb_outline),
-              label: const Text("Ver dica"),
+              label: Text(context.l10n.btn_see_hint),
               onPressed: () {
                 Navigator.of(ctx).pop('hint');
               },
@@ -465,7 +465,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
               onPressed: () {
                 Navigator.of(ctx).pop('cont');
               },
-              child: const Text("Continuar"),
+              child: Text(context.l10n.btn_continue),
             ),
           ],
         );
@@ -588,7 +588,8 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
         clipBehavior: Clip.none,
         children: [
           IconButton(
-            tooltip: 'Dica ($_hintsLeft)',
+            // tooltip: 'Dica ($_hintsLeft)',
+            tooltip: context.l10n.hint_tooltip_fmt(_hintsLeft),
             icon: const Icon(Icons.lightbulb_outline),
             onPressed: _hintsLeft > 0
                 ? () {
@@ -605,8 +606,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
             child: CircleAvatar(
               radius: 9,
               backgroundColor: Colors.red,
-              child: Text(
-                '$_hintsLeft',
+              child: Text('$_hintsLeft',
                 style: const TextStyle(
                   fontSize: 10,
                   color: Colors.white,
@@ -623,7 +623,8 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
   // botão de cancelar partida no app bar
   Widget _buildCancelAction() {
     return IconButton(
-      tooltip: 'Sair',
+      //tooltip: 'Sair',
+      tooltip: context.l10n.quit_tooltip,
       icon: const Icon(Icons.close),
       onPressed: () async {
         _timer?.cancel();
@@ -631,18 +632,16 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
         final reallyQuit = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text("Encerrar treino?"),
-            content: const Text(
-              "Se você sair agora, essa rodada vai terminar antes das 10 questões.",
-            ),
+            title: Text(context.l10n.quit_title),
+            content: Text(context.l10n.quit_content),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text("Continuar jogando"),
+                child: Text(context.l10n.quit_keep_playing),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text("Sair"),
+                child: Text(context.l10n.btn_exit),
               ),
             ],
           ),
@@ -701,8 +700,11 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
   Widget build(BuildContext context) {
     final q = _currentQuestion;
 
-    final appBarTitle = "Tabuada do $_currentTableShown "
-        "(${_questionsAnswered + 1} / $_roundMax)";
+    final appBarTitle = context.l10n.mult_session_title(
+      _currentTableShown,
+      _questionsAnswered + 1,
+      _roundMax,
+    );
 
     // Se ainda não geramos a 1ª pergunta (q == null), mostra loading
     if (q == null) {
@@ -743,15 +745,13 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Acertos: $_scoreCorrect/$_scoreTotal",
+                Text(context.l10n.hits_fmt(_scoreCorrect, _scoreTotal),
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),
                 ),
-                Text(
-                  "Tempo: $_remainingSeconds s",
+                Text(context.l10n.time_secs_fmt(_remainingSeconds),
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -774,8 +774,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
             Expanded(
               flex: 2,
               child: Center(
-                child: Text(
-                  q.questionText,
+                child: Text(q.questionText,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 36,
@@ -807,11 +806,8 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
                 ],
               ),
             ),
-
             const SizedBox(height: 16),
-
-            const Text(
-              "Escolha a resposta antes do tempo acabar!",
+            Text(context.l10n.mult_choose_before_timeout,
               textAlign: TextAlign.center,
             ),
           ],

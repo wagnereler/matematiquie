@@ -3,21 +3,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:math_lite/l10n/l10n.dart';
 import '../../application/players_cubit.dart';
 import '../../domain/player.dart';
-import '../../domain/game_mode.dart';
 
 class PlayerSelectScreen extends StatelessWidget {
   const PlayerSelectScreen({super.key});
 
+  String _modeLabel(BuildContext context, String code) {
+    final l10n = context.l10n;
+    switch (code) {
+      case 'mul':
+        return l10n.mode_multiplication;
+      case 'add':
+        return l10n.mode_addition;
+      case 'sub':
+        return l10n.mode_subtraction;
+      case 'div':
+        return l10n.mode_division;
+      default:
+        return code;
+    }
+  }
+
+  String _langLabel(BuildContext context, String code) {
+    final l10n = context.l10n;
+    switch (code) {
+      case 'pt':
+        return l10n.lang_portuguese;
+      case 'en':
+        return l10n.lang_english;
+      case 'es':
+        return l10n.lang_spanish;
+      default:
+        return code;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => context.go('/'),
         ),
-        title: const Text('Escolher jogador'),
+        title: Text(l10n.players_title),
       ),
       body: BlocBuilder<PlayersCubit, PlayersState>(
         builder: (context, state) {
@@ -30,9 +62,9 @@ class PlayerSelectScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const Text(
-                "Jogadores",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              Text(
+                l10n.players_list,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
 
@@ -40,6 +72,8 @@ class PlayerSelectScreen extends StatelessWidget {
                 _PlayerCard(
                   player: p,
                   isActive: p.id == state.activePlayerId,
+                  langLabel: _langLabel(context, p.languageCode),
+                  modeLabel: _modeLabel(context, p.mode),
                   onActivate: () => cubit.selectPlayer(p.id),
                   onEdit: () async {
                     await _showEditPlayerDialog(context, p);
@@ -55,11 +89,9 @@ class PlayerSelectScreen extends StatelessWidget {
               const SizedBox(height: 24),
               const Divider(height: 32),
 
-              const Text(
-                "Cada jogador pode ter idioma, modo preferido e "
-                "dificuldade própria (1 a 10). Isso ajuda o adulto a "
-                "personalizar o treino sem misturar progresso das crianças.",
-                style: TextStyle(fontSize: 14, height: 1.4),
+              Text(
+                l10n.players_info,
+                style: const TextStyle(fontSize: 14, height: 1.4),
               ),
 
               const SizedBox(height: 24),
@@ -80,7 +112,7 @@ class PlayerSelectScreen extends StatelessWidget {
                   onPressed: () async {
                     await _showAddPlayerDialog(context);
                   },
-                  child: const Text("➕ Novo jogador"),
+                  child: Text("➕ ${l10n.players_new}"),
                 ),
               ),
 
@@ -96,6 +128,8 @@ class PlayerSelectScreen extends StatelessWidget {
 class _PlayerCard extends StatelessWidget {
   final Player player;
   final bool isActive;
+  final String langLabel;
+  final String modeLabel;
   final VoidCallback onActivate;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -103,27 +137,16 @@ class _PlayerCard extends StatelessWidget {
   const _PlayerCard({
     required this.player,
     required this.isActive,
+    required this.langLabel,
+    required this.modeLabel,
     required this.onActivate,
     required this.onEdit,
     required this.onDelete,
   });
 
-  String _langLabel(String code) {
-    switch (code) {
-      case 'pt':
-        return 'Português';
-      case 'en':
-        return 'English';
-      case 'es':
-        return 'Español';
-      default:
-        return code;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final gm = GameModeX.fromCode(player.mode);
+    final l10n = context.l10n;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -148,7 +171,9 @@ class _PlayerCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              isActive ? "${player.name} (ATUAL)" : player.name,
+              isActive
+                  ? "${player.name} (${l10n.players_current})"
+                  : player.name,
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -159,17 +184,17 @@ class _PlayerCard extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  tooltip: 'Ativar',
+                  tooltip: l10n.tooltip_activate,
                   onPressed: onActivate,
                   icon: const Icon(Icons.check_circle_outline),
                 ),
                 IconButton(
-                  tooltip: 'Editar',
+                  tooltip: l10n.tooltip_edit,
                   onPressed: onEdit,
                   icon: const Icon(Icons.edit_outlined),
                 ),
                 IconButton(
-                  tooltip: 'Excluir',
+                  tooltip: l10n.tooltip_delete,
                   onPressed: onDelete,
                   icon: const Icon(Icons.delete_outline),
                 ),
@@ -178,9 +203,9 @@ class _PlayerCard extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            Text("Idioma: ${_langLabel(player.languageCode)}"),
-            Text("Modo: ${gm.labelPt}"),
-            Text("Dificuldade: nível ${player.difficultyMax}/10"),
+            Text("${l10n.label_language}: $langLabel"),
+            Text("${l10n.label_mode}: $modeLabel"),
+            Text(l10n.difficulty_fmt(player.difficultyMax)),
           ],
         ),
       ),
@@ -190,6 +215,7 @@ class _PlayerCard extends StatelessWidget {
 
 Future<void> _showAddPlayerDialog(BuildContext context) async {
   final cubit = context.read<PlayersCubit>();
+  final l10n = context.l10n;
 
   final nameCtrl = TextEditingController();
   String lang = 'pt';
@@ -213,9 +239,9 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  "Novo jogador",
-                  style: TextStyle(
+                Text(
+                  l10n.players_add_title,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
@@ -224,10 +250,10 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
 
                 TextField(
                   controller: nameCtrl,
-                  decoration: const InputDecoration(
-                    labelText: "Nome",
-                    hintText: "Ex.: Ana, João...",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.label_name,
+                    hintText: l10n.name_hint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -237,17 +263,17 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         value: lang,
-                        decoration: const InputDecoration(
-                          labelText: "Idioma",
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: l10n.label_language,
+                          border: const OutlineInputBorder(),
                         ),
-                        items: const [
+                        items: [
                           DropdownMenuItem(
-                              value: 'pt', child: Text('Português')),
+                              value: 'pt', child: Text(l10n.lang_portuguese)),
                           DropdownMenuItem(
-                              value: 'en', child: Text('English')),
+                              value: 'en', child: Text(l10n.lang_english)),
                           DropdownMenuItem(
-                              value: 'es', child: Text('Español')),
+                              value: 'es', child: Text(l10n.lang_spanish)),
                         ],
                         onChanged: (v) {
                           if (v != null) {
@@ -262,19 +288,23 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         value: mode,
-                        decoration: const InputDecoration(
-                          labelText: "Modo",
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: l10n.label_mode,
+                          border: const OutlineInputBorder(),
                         ),
-                        items: const [
+                        items: [
                           DropdownMenuItem(
-                              value: 'mul', child: Text('Multiplicação')),
+                              value: 'mul',
+                              child: Text(l10n.mode_multiplication)),
                           DropdownMenuItem(
-                              value: 'add', child: Text('Adição')),
+                              value: 'add',
+                              child: Text(l10n.mode_addition)),
                           DropdownMenuItem(
-                              value: 'sub', child: Text('Subtração')),
+                              value: 'sub',
+                              child: Text(l10n.mode_subtraction)),
                           DropdownMenuItem(
-                              value: 'div', child: Text('Divisão')),
+                              value: 'div',
+                              child: Text(l10n.mode_division)),
                         ],
                         onChanged: (v) {
                           if (v != null) {
@@ -291,9 +321,9 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
 
                 DropdownButtonFormField<int>(
                   value: difficulty,
-                  decoration: const InputDecoration(
-                    labelText: "Dificuldade (1 fácil, 10 rápido)",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.difficulty_hint,
+                    border: const OutlineInputBorder(),
                   ),
                   items: [
                     for (int i = 1; i <= 10; i++)
@@ -327,9 +357,9 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
                       mode: mode,
                       difficultyMax: difficulty,
                     );
-                    Navigator.of(ctx).pop();
+                    if (ctx.mounted) Navigator.of(ctx).pop();
                   },
-                  child: const Text("Salvar jogador"),
+                  child: Text(l10n.save_player),
                 ),
               ],
             );
@@ -342,6 +372,7 @@ Future<void> _showAddPlayerDialog(BuildContext context) async {
 
 Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
   final cubit = context.read<PlayersCubit>();
+  final l10n = context.l10n;
 
   final nameCtrl = TextEditingController(text: player.name);
   String lang = player.languageCode;
@@ -365,9 +396,9 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  "Editar jogador",
-                  style: TextStyle(
+                Text(
+                  l10n.players_edit_title,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
@@ -376,9 +407,9 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
 
                 TextField(
                   controller: nameCtrl,
-                  decoration: const InputDecoration(
-                    labelText: "Nome",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.label_name,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -388,17 +419,17 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         value: lang,
-                        decoration: const InputDecoration(
-                          labelText: "Idioma",
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: l10n.label_language,
+                          border: const OutlineInputBorder(),
                         ),
-                        items: const [
+                        items: [
                           DropdownMenuItem(
-                              value: 'pt', child: Text('Português')),
+                              value: 'pt', child: Text(l10n.lang_portuguese)),
                           DropdownMenuItem(
-                              value: 'en', child: Text('English')),
+                              value: 'en', child: Text(l10n.lang_english)),
                           DropdownMenuItem(
-                              value: 'es', child: Text('Español')),
+                              value: 'es', child: Text(l10n.lang_spanish)),
                         ],
                         onChanged: (v) {
                           if (v != null) {
@@ -413,19 +444,23 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         value: mode,
-                        decoration: const InputDecoration(
-                          labelText: "Modo",
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: l10n.label_mode,
+                          border: const OutlineInputBorder(),
                         ),
-                        items: const [
+                        items: [
                           DropdownMenuItem(
-                              value: 'mul', child: Text('Multiplicação')),
+                              value: 'mul',
+                              child: Text(l10n.mode_multiplication)),
                           DropdownMenuItem(
-                              value: 'add', child: Text('Adição')),
+                              value: 'add',
+                              child: Text(l10n.mode_addition)),
                           DropdownMenuItem(
-                              value: 'sub', child: Text('Subtração')),
+                              value: 'sub',
+                              child: Text(l10n.mode_subtraction)),
                           DropdownMenuItem(
-                              value: 'div', child: Text('Divisão')),
+                              value: 'div',
+                              child: Text(l10n.mode_division)),
                         ],
                         onChanged: (v) {
                           if (v != null) {
@@ -443,9 +478,9 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
 
                 DropdownButtonFormField<int>(
                   value: difficulty,
-                  decoration: const InputDecoration(
-                    labelText: "Dificuldade (1 fácil, 10 rápido)",
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: l10n.difficulty_hint,
+                    border: const OutlineInputBorder(),
                   ),
                   items: [
                     for (int i = 1; i <= 10; i++)
@@ -480,9 +515,9 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
                         difficultyMax: difficulty,
                       ),
                     );
-                    Navigator.of(ctx).pop();
+                    if (ctx.mounted) Navigator.of(ctx).pop();
                   },
-                  child: const Text("Salvar alterações"),
+                  child: Text(l10n.save_changes),
                 ),
               ],
             );
@@ -494,23 +529,26 @@ Future<void> _showEditPlayerDialog(BuildContext context, Player player) async {
 }
 
 Future<bool?> _confirmDelete(BuildContext context, Player player) async {
+  final l10n = context.l10n;
+
   return showDialog<bool>(
     context: context,
     builder: (ctx) {
       return AlertDialog(
-        title: const Text("Excluir jogador"),
+        title: Text(l10n.players_delete_title),
         content: Text(
-            "Tem certeza que deseja excluir '${player.name}'? Isso não pode ser desfeito."),
+          l10n.players_delete_confirm_fmt(player.name),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text("Cancelar"),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text(
-              "Excluir",
-              style: TextStyle(color: Colors.red),
+            child: Text(
+              l10n.delete,
+              style: const TextStyle(color: Colors.red),
             ),
           ),
         ],

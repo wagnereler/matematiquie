@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:math_lite/l10n/l10n.dart';
 import '../../application/players_cubit.dart';
 import '../../infrastructure/db/app_database.dart';
 
@@ -80,30 +81,34 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final hasPlayer = _playerName != null;
 
     // monta a lista de cards por tabuada (ordenada pela tabuada)
     final List<Widget> perTableWidgets = () {
       final entries = _perTable.entries.toList();
       entries.sort((a, b) => a.key.compareTo(b.key));
-
-      return entries.map((entry) {
-        return _TabuadaCard(
-          base: entry.key,
-          stats: entry.value,
-        );
-      }).toList();
+      return entries
+          .map((entry) => _TabuadaCard(base: entry.key, stats: entry.value))
+          .toList();
     }();
+
+    // string de aproveitamento geral
+    final String successText = _total == 0
+        ? l10n.stats_success_rate_na
+        : l10n.stats_success_rate_fmt(
+            (((_correct / _total) * 100).toStringAsFixed(1)) + '%',
+          );
 
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
           onPressed: () => context.go('/'),
         ),
-        title: const Text('Estatísticas'),
+        title: Text(l10n.stats_title),
         actions: [
           IconButton(
-            tooltip: 'Atualizar',
+            tooltip: l10n.refresh,
             onPressed: _loadStats,
             icon: const Icon(Icons.refresh),
           ),
@@ -112,9 +117,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : !hasPlayer
-              ? const Center(
+              ? Center(
                   child: Text(
-                    "Nenhum jogador ativo.\nEscolha ou crie um jogador.",
+                    l10n.stats_no_player_hint,
                     textAlign: TextAlign.center,
                   ),
                 )
@@ -123,7 +128,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   child: ListView(
                     children: [
                       Text(
-                        "Jogador: $_playerName",
+                        l10n.stats_player_fmt(_playerName!),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -145,31 +150,26 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Resumo geral",
-                              style: TextStyle(
+                            Text(
+                              l10n.stats_overall,
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Text("Total de perguntas: $_total"),
-                            Text("Acertos: $_correct"),
-                            Text(
-                              _total == 0
-                                  ? "Aproveitamento: —"
-                                  : "Aproveitamento: "
-                                      "${((_correct / _total) * 100).toStringAsFixed(1)}%",
-                            ),
+                            Text(l10n.stats_total_questions_fmt(_total)),
+                            Text(l10n.hits_only_fmt(_correct)),
+                            Text(successText),
                           ],
                         ),
                       ),
 
                       const SizedBox(height: 24),
 
-                      const Text(
-                        "Por tabuada",
-                        style: TextStyle(
+                      Text(
+                        l10n.stats_by_table,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -177,14 +177,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       const SizedBox(height: 12),
 
                       if (_perTable.isEmpty)
-                        const Text(
-                          "Ainda não temos dados por tabuada.\nJogue uma rodada!",
-                          style: TextStyle(fontSize: 14),
+                        Text(
+                          l10n.stats_by_table_empty,
+                          style: const TextStyle(fontSize: 14),
                         )
                       else
-                        Column(
-                          children: perTableWidgets,
-                        ),
+                        Column(children: perTableWidgets),
                     ],
                   ),
                 ),
@@ -195,25 +193,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 class _TabStats {
   int total;
   int correct;
-  _TabStats({
-    required this.total,
-    required this.correct,
-  });
+  _TabStats({required this.total, required this.correct});
 }
 
 class _TabuadaCard extends StatelessWidget {
   final int base;
   final _TabStats stats;
-  const _TabuadaCard({
-    required this.base,
-    required this.stats,
-  });
+  const _TabuadaCard({required this.base, required this.stats});
 
   @override
   Widget build(BuildContext context) {
-    final perc = stats.total == 0
-        ? "-"
-        : "${((stats.correct / stats.total) * 100).toStringAsFixed(1)}%";
+    final l10n = context.l10n;
+    final String percentStr = stats.total == 0
+        ? '—'
+        : ((stats.correct / stats.total) * 100).toStringAsFixed(1) + '%';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -235,7 +228,11 @@ class _TabuadaCard extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: Text(
-              "Acertos: ${stats.correct}/${stats.total} ($perc)",
+              l10n.stats_hits_over_total_percent_fmt(
+                stats.correct,
+                stats.total,
+                percentStr,
+              ),
               style: const TextStyle(fontSize: 16),
             ),
           ),

@@ -1,18 +1,14 @@
 // lib/presentation/screens/multiplication_result_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:math_lite/l10n/l10n.dart';
 
 import '../../domain/round_summary.dart';
 import '../../domain/round_attempt.dart';
 
-/// Tela que aparece depois de terminar a rodada (10 perguntas)
-/// Mostra:
-///  - pontuação final
-///  - lista de respostas
-///  - botões "Jogar de novo" e "Voltar"
 class MultiplicationResultScreen extends StatelessWidget {
   final RoundSummary summary;
-  final String replayParam; // ex: "7" ou "random_2_10"
+  final String replayParam;
 
   const MultiplicationResultScreen({
     super.key,
@@ -20,9 +16,7 @@ class MultiplicationResultScreen extends StatelessWidget {
     required this.replayParam,
   });
 
-  int _countCorrect() {
-    return summary.attempts.where((a) => a.isCorrect).length;
-  }
+  int _countCorrect() => summary.attempts.where((a) => a.isCorrect).length;
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +27,16 @@ class MultiplicationResultScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.home),
-          onPressed: () {
-            // força voltar pra Home e não pra rotas antigas como /play
-            context.go('/');
-          },
+          onPressed: () => context.go('/'),
         ),
-        title: const Text('Resultado'),
+        title: Text(context.l10n.result_title),
       ),
       body: SafeArea(
         child: Column(
           children: [
             const SizedBox(height: 16),
             Text(
-              "Seu desempenho",
+              context.l10n.result_performance_title,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
@@ -53,9 +44,8 @@ class MultiplicationResultScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // pontuação grande
             Text(
-              "$correct / $total acertos",
+              context.l10n.score_fmt(correct, total),
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -68,10 +58,11 @@ class MultiplicationResultScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               correct == total
-                  ? "Excelente! Você acertou todas 👏"
-                  : correct >= total * 0.7
-                      ? "Muito bom! Continue praticando 👌"
-                      : "Tudo bem errar 🙂 Vamos treinar mais um pouquinho.",
+                  ? context.l10n.praise_perfect
+                  : (correct >= total * 0.7
+                      ? context.l10n.praise_good
+                      : context.l10n.praise_try_more),
+              //            ↑ vírgula aqui
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, height: 1.3),
             ),
@@ -79,7 +70,6 @@ class MultiplicationResultScreen extends StatelessWidget {
             const SizedBox(height: 16),
             const Divider(height: 1),
 
-            // Lista de perguntas/respostas
             Expanded(
               child: ListView.separated(
                 padding:
@@ -100,7 +90,6 @@ class MultiplicationResultScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // Botão "Jogar novamente"
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -115,23 +104,12 @@ class MultiplicationResultScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // Vai direto pro jogo novamente com mesmo parâmetro
-                        //
-                        // Nossa rota de jogo deve aceitar algo como:
-                        // /train/multiplication/game/:tableParam
-                        // Ex: /train/multiplication/game/7
-                        // ou  /train/multiplication/game/random_2_10
-                        context.go(
-                          '/train/multiplication/game/$replayParam',
-                        );
+                        context.go('/train/multiplication/game/$replayParam');
                       },
-                      label: const Text("Jogar de novo"),
+                      label: Text(context.l10n.play_again),
                     ),
                   ),
-
                   const SizedBox(height: 12),
-
-                  // Botão "Voltar"
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
@@ -144,12 +122,8 @@ class MultiplicationResultScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () {
-                        // Em vez de tentar voltar pra rota anterior (que às vezes é /play),
-                        // manda pra Home de forma direta e segura.
-                        context.go('/');
-                      },
-                      label: const Text("Voltar para início"),
+                      onPressed: () => context.go('/'),
+                      label: Text(context.l10n.back_home),
                     ),
                   ),
                 ],
@@ -162,10 +136,6 @@ class MultiplicationResultScreen extends StatelessWidget {
   }
 }
 
-/// Linha individual mostrando cada tentativa:
-///   Pergunta "3 × 7 = ?"
-///   Você respondeu: 21 (✅ ou ❌)
-///   Correto era: 21
 class _AttemptRow extends StatelessWidget {
   final RoundAttempt attempt;
   final int number;
@@ -180,14 +150,14 @@ class _AttemptRow extends StatelessWidget {
     final wasAnswered = attempt.selectedAnswer != null;
     final wasCorrect = attempt.isCorrect;
     final userAnswerText =
-        wasAnswered ? "${attempt.selectedAnswer}" : "— (sem resposta)";
-    final qText = attempt.questionText; // já é tipo "3 × 7 = ?"
+        wasAnswered ? "${attempt.selectedAnswer}" : context.l10n.no_answer;
+    final qText = attempt.questionText;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Pergunta $number: $qText",
+          context.l10n.attempt_question_fmt(number, qText),
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -197,7 +167,8 @@ class _AttemptRow extends StatelessWidget {
         Row(
           children: [
             Text(
-              "Você respondeu: $userAnswerText",
+              context.l10n.you_answered_fmt(userAnswerText),
+              //                                        ↑ vírgula aqui
               style: TextStyle(
                 fontSize: 15,
                 color: wasCorrect
@@ -216,7 +187,7 @@ class _AttemptRow extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          "Correto: ${attempt.correctAnswer}",
+          context.l10n.correct_fmt("${attempt.correctAnswer}"),
           style: const TextStyle(fontSize: 15, color: Colors.black87),
         ),
       ],

@@ -1,13 +1,21 @@
-// lib/l10n/app_pt.arb
 {
   "@@locale": "pt",
   "appTitle": "Matematiquei",
-  "home_play": "Treinar",
-  "home_stats": "Estatísticas",
+  "players_title": "Escolher jogador",
+  "players_list": "Jogadores",
+  "label_language": "Idioma",
+  "label_mode": "Modo",
+  "mode_multiplication": "Multiplicação",
+  "difficulty_fmt": "Dificuldade: nível {level}/10",
+  "@difficulty_fmt": { "placeholders": { "level": { "type": "int" } } },
+  "btn_switch": "Trocar",
   "home_player": "Jogador",
   "home_level": "Nível",
   "home_hints": "Dicas",
-  "home_changeOrAdd": "Trocar/Cadastrar",
+  "home_changeOrAdd": "Escolher / Cadastrar",
+  "home_play": "Treinar",
+  "home_stats": "Estatísticas",
+  "home_choose_player_hint": "Pratique todos os dias um pouquinho.\nComece devagar, priorize o acerto 🙂",
   "play_title": "Treinar",
   "play_chooseType": "Escolha o tipo de treino:",
   "play_multiplication": "Tabuada (×)",
@@ -17,9 +25,169 @@
   "mult_random": "Aleatório",
   "mult_random_title": "Treino aleatório",
   "mult_random_desc": "Escolha o intervalo de tabuadas que quer misturar. Ex.: 2 até 10. Você também pode usar valores maiores (11..20).",
-  "btn_play": "Jogar",
-  "btn_cancel": "Cancelar",
   "tip_footnote1": "• 'Erros' foca nas contas que você mais errou (ex: 7×5).",
   "tip_footnote2": "• 'Aleatório' mistura tabuadas num intervalo que você escolhe.",
-  "tip_footnote3": "• Cada rodada tem 10 perguntas e salva tudo no histórico."
+  "tip_footnote3": "• Cada rodada tem 10 perguntas e salva tudo no histórico.",
+  "mult_session_title": "Tabuada do {table} ({current} / {total})",
+  "@mult_session_title": {
+    "placeholders": {
+      "table": { "type": "int" },
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "hits_fmt": "Acertos: {hits}/{round}",
+  "@hits_fmt": { "placeholders": { "hits": {}, "round": {} } },
+  "time_secs_fmt": "Tempo: {secs} s",
+  "@time_secs_fmt": { "placeholders": { "secs": {} } },
+  "mult_choose_before_timeout": "Escolha a resposta antes do tempo acabar!",
+  "howto_title": "Como pensar nessa conta:",
+  "howto_repeat_addition": "💡 Pense como soma repetida:",
+  "howto_step_by_step": "Exemplo de construção passo a passo:",
+  "howto_doubling_helps": "💡 Dobrar ajuda:",
+  "mult_tips_title": "📚 Dicas da tabuada:",
+  "summary_label": "Resumo",
+  "btn_continue": "Continuar",
+  "btn_close": "Fechar",
+  "btn_exit": "Sair",
+  "btn_see_hint": "Ver dica",
+  "no_hints_left": "Você não tem mais dicas disponíveis.",
+  "hint_tooltip_fmt": "Dica ({count})",
+  "@hint_tooltip_fmt": { "placeholders": { "count": { "type": "int" } } },
+  "wrong_title": "Resposta incorreta",
+  "wrong_explain_fmt": "A resposta correta é {correct} porque {a} × {b} = {correct}.\n\nQuer ver como chegar nesse resultado passo a passo?",
+  "@wrong_explain_fmt": {
+    "placeholders": {
+      "a": { "type": "int" },
+      "b": { "type": "int" },
+      "correct": { "type": "int" }
+    }
+  },
+  "quit_tooltip": "Sair",
+  "quit_title": "Encerrar treino?",
+  "quit_content": "Se você sair agora, essa rodada vai terminar antes das 10 questões.",
+  "quit_keep_playing": "Continuar jogando",
+  "result_title": "Resultado",
+  "result_performance_title": "Seu desempenho",
+  "score_fmt": "{correct} / {total} acertos",
+  "@score_fmt": { "placeholders": { "correct": { "type": "int" }, "total": { "type": "int" } } },
+  "praise_perfect": "Excelente! Você acertou todas 👏",
+  "praise_good": "Muito bom! Continue praticando 👌",
+  "praise_try_more": "Tudo bem errar 🙂 Vamos treinar mais um pouquinho.",
+  "play_again": "Jogar de novo",
+  "back_home": "Voltar para início",
+  "no_answer": "— (sem resposta)",
+  "attempt_question_fmt": "Pergunta {number}: {qText}",
+  "@attempt_question_fmt": { "placeholders": { "number": { "type": "int" }, "qText": {} } },
+  "you_answered_fmt": "Você respondeu: {answer}",
+  "@you_answered_fmt": { "placeholders": { "answer": {} } },
+  "correct_fmt": "Correto: {answer}",
+  "@correct_fmt": { "placeholders": { "answer": {} } },
+
+  "howto_repeat_addition_explain_fmt": "{a} × {b} quer dizer somar {b} um total de {a} vezes (ou somar {a} um total de {b} vezes).",
+  "@howto_repeat_addition_explain_fmt": {
+    "placeholders": {
+      "a": { "type": "int" },
+      "b": { "type": "int" }
+    }
+  },
+
+  "howto_step_continue_fmt": "continuando assim chegamos em {result}.",
+  "@howto_step_continue_fmt": {
+    "placeholders": { "result": { "type": "int" } }
+  },
+
+  "howto_nine_trick_title": "💡 Truque da tabuada do 9:",
+  "howto_nine_trick_explain_fmt": "9 × {n} = (10 × {n}) − {n} = {tenTimes} − {n} = {minusOther}",
+  "@howto_nine_trick_explain_fmt": {
+    "placeholders": {
+      "n": { "type": "int" },
+      "tenTimes": { "type": "int" },
+      "minusOther": { "type": "int" }
+    }
+  },
+
+  "tip_zero_property": "0×N = 0; N×0 = 0.",
+  "tip_one_property": "1×N = N; N×1 = N.",
+  "tip_table_2_fmt": "Tabuada do 2: é só dobrar. Ex: 2 × {other} = {other} + {other}.",
+  "@tip_table_2_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_3": "Tabuada do 3: pense em somar de 3 em 3: 3, 6, 9, 12, 15, 18...",
+  "tip_table_4": "Tabuada do 4: dobre duas vezes. Ex: 4 × n = (2 × n) × 2.",
+  "tip_table_5": "Tabuada do 5: termina em 0 ou 5 (par → 0, ímpar → 5).",
+  "tip_table_6_fmt": "Tabuada do 6: pense 5 × {other} + {other}.",
+  "@tip_table_6_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_7_fmt": "Tabuada do 7: pense 5 × {other} + 2 × {other}.",
+  "@tip_table_7_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_8_fmt": "Tabuada do 8: dobro do dobro do dobro. Ex: 8 × {other} = (4 × {other}) × 2.",
+  "@tip_table_8_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_9_note": "Tabuada do 9: a soma dos dígitos do resultado costuma dar 9 (ex.: 9×4=36 → 3+6=9).",
+  "tip_table_10_fmt": "Tabuada do 10: basta colocar um zero no final. Ex: 10 × {other} = {other}0.",
+  "@tip_table_10_fmt": { "placeholders": { "other": { "type": "int" } } },
+  "errors_need_active_player": "Ative um jogador para treinar os erros.",
+
+  "errors_not_enough": "Ainda não temos erros suficientes.\nJogue algumas rodadas primeiro 😉",
+  "label_from": "De",
+  "label_to": "Até",
+  "word_to": "até",
+  "btn_cancel": "Cancelar",
+  "btn_play": "Jogar",
+
+  "players_add_title": "Novo jogador",
+  "players_info": "Cada jogador pode ter idioma, modo preferido e dificuldade própria (1 a 10). Isso ajuda o adulto a personalizar o treino sem misturar progresso das crianças.",
+  "players_new": "Novo jogador",
+  "players_current": "ATUAL",
+
+  "tooltip_activate": "Ativar",
+  "tooltip_edit": "Editar",
+  "tooltip_delete": "Excluir",
+
+  "label_name": "Nome",
+  "name_hint": "Ex.: Ana, João...",
+  "difficulty_hint": "Dificuldade (1 fácil, 10 rápido)",
+  "save_player": "Salvar jogador",
+
+  "players_edit_title": "Editar jogador",
+  "save_changes": "Salvar alterações",
+
+  "players_delete_title": "Excluir jogador",
+  "players_delete_confirm_fmt": "Tem certeza que deseja excluir '{name}'? Isso não pode ser desfeito.",
+  "@players_delete_confirm_fmt": { "placeholders": { "name": {} } },
+
+  "cancel": "Cancelar",
+  "delete": "Excluir",
+
+  "lang_portuguese": "Português",
+  "lang_english": "English",
+  "lang_spanish": "Español",
+
+  "mode_addition": "Adição",
+  "mode_subtraction": "Subtração",
+  "mode_division": "Divisão",
+
+  "settings_title": "Configurações",
+  "settings_body": "Aqui futuramente:\n• Escolher idioma da interface\n• Configurações pedagógicas\n• Dificuldade padrão\n",
+
+  "stats_title": "Estatísticas",
+  "refresh": "Atualizar",
+  "stats_no_player_hint": "Nenhum jogador ativo.\nEscolha ou crie um jogador.",
+  "stats_player_fmt": "Jogador: {name}",
+  "@stats_player_fmt": { "placeholders": { "name": {} } },
+  "stats_overall": "Resumo geral",
+  "stats_total_questions_fmt": "Total de perguntas: {total}",
+  "@stats_total_questions_fmt": { "placeholders": { "total": { "type": "int" } } },
+  "hits_only_fmt": "Acertos: {hits}",
+  "@hits_only_fmt": { "placeholders": { "hits": { "type": "int" } } },
+  "stats_success_rate_na": "Aproveitamento: —",
+  "stats_success_rate_fmt": "Aproveitamento: {percent}",
+  "@stats_success_rate_fmt": { "placeholders": { "percent": {} } },
+  "stats_by_table": "Por tabuada",
+  "stats_by_table_empty": "Ainda não temos dados por tabuada.\nJogue uma rodada!",
+  "stats_hits_over_total_percent_fmt": "Acertos: {hits}/{total} ({percent})",
+  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } }
 }
+
+

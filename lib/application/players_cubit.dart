@@ -2,6 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart'; // ← para Locale
 
 import '../domain/player.dart';
 import '../infrastructure/players_repository.dart';
@@ -49,6 +50,19 @@ class PlayersCubit extends Cubit<PlayersState> {
     required this.prefs,
   }) : super(PlayersState.initial());
 
+  // ===== Locale da UI conforme o jogador ativo =====
+  Locale _localeFromCode(String? raw) {
+    final x = (raw ?? 'pt').toLowerCase();
+    if (x.startsWith('en')) return const Locale('en');
+    if (x.startsWith('es')) return const Locale('es');
+    return const Locale('pt');
+  }
+
+  /// Locale atual da interface, calculado a partir do jogador ativo.
+  Locale get uiLocale =>
+      _localeFromCode(state.activePlayer?.languageCode);
+
+  // ================== Ações ==================
   Future<void> load() async {
     emit(state.copyWith(loading: true));
 

@@ -1,13 +1,21 @@
-// lib/l10n/app_en.arb
 {
   "@@locale": "en",
-  "appTitle": "Matematiquei",
-  "home_play": "Train",
-  "home_stats": "Statistics",
+  "appTitle": "MathShow",
+  "players_title": "Choose player",
+  "players_list": "Players",
+  "label_language": "Language",
+  "label_mode": "Mode",
+  "mode_multiplication": "Multiplication",
+  "difficulty_fmt": "Difficulty: level {level}/10",
+  "@difficulty_fmt": { "placeholders": { "level": { "type": "int" } } },
+  "btn_switch": "Switch",
   "home_player": "Player",
   "home_level": "Level",
   "home_hints": "Hints",
-  "home_changeOrAdd": "Switch/Add",
+  "home_changeOrAdd": "Choose / Add",
+  "home_play": "Train",
+  "home_stats": "Statistics",
+  "home_choose_player_hint": "Practice a little every day.\nStart slowly, prioritize accuracy 🙂",
   "play_title": "Train",
   "play_chooseType": "Choose a training type:",
   "play_multiplication": "Times Table (×)",
@@ -17,9 +25,169 @@
   "mult_random": "Random",
   "mult_random_title": "Random training",
   "mult_random_desc": "Choose the range of tables to shuffle. E.g., 2 to 10. You can also use bigger ranges (11..20).",
-  "btn_play": "Play",
-  "btn_cancel": "Cancel",
   "tip_footnote1": "• “Missed” focuses on the pairs you missed most (e.g., 7×5).",
   "tip_footnote2": "• “Random” shuffles tables within your chosen range.",
-  "tip_footnote3": "• Each round has 10 questions and records your history."
+  "tip_footnote3": "• Each round has 10 questions and records your history.",
+  "mult_session_title": "Table of {table} ({current} / {total})",
+  "@mult_session_title": {
+    "placeholders": {
+      "table": { "type": "int" },
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "hits_fmt": "Hits: {hits}/{round}",
+  "@hits_fmt": { "placeholders": { "hits": {}, "round": {} } },
+  "time_secs_fmt": "Time: {secs} s",
+  "@time_secs_fmt": { "placeholders": { "secs": {} } },
+  "mult_choose_before_timeout": "Choose the answer before time runs out!",
+  "howto_title": "How to think about this:",
+  "howto_repeat_addition": "💡 Think as repeated addition:",
+  "howto_step_by_step": "Step-by-step example:",
+  "howto_doubling_helps": "💡 Doubling helps:",
+  "mult_tips_title": "📚 Times table tips:",
+  "summary_label": "Summary",
+  "btn_continue": "Continue",
+  "btn_close": "Close",
+  "btn_exit": "Exit",
+  "btn_see_hint": "See hint",
+  "no_hints_left": "You have no hints left.",
+  "hint_tooltip_fmt": "Hint ({count})",
+  "@hint_tooltip_fmt": { "placeholders": { "count": { "type": "int" } } },
+  "wrong_title": "Incorrect answer",
+  "wrong_explain_fmt": "The correct answer is {correct} because {a} × {b} = {correct}.\n\nDo you want to see how to get this result step by step?",
+  "@wrong_explain_fmt": {
+    "placeholders": {
+      "a": { "type": "int" },
+      "b": { "type": "int" },
+      "correct": { "type": "int" }
+    }
+  },
+  "quit_tooltip": "Quit",
+  "quit_title": "End training?",
+  "quit_content": "If you exit now, this round will end before 10 questions.",
+  "quit_keep_playing": "Keep playing",
+  "result_title": "Results",
+  "result_performance_title": "Your performance",
+  "score_fmt": "{correct} / {total} correct",
+  "@score_fmt": { "placeholders": { "correct": { "type": "int" }, "total": { "type": "int" } } },
+  "praise_perfect": "Excellent! You got them all 👏",
+  "praise_good": "Great job! Keep practicing 👌",
+  "praise_try_more": "It's okay to miss 🙂 Let's practice a bit more.",
+  "play_again": "Play again",
+  "back_home": "Back to home",
+  "no_answer": "— (no answer)",
+  "attempt_question_fmt": "Question {number}: {qText}",
+  "@attempt_question_fmt": { "placeholders": { "number": { "type": "int" }, "qText": {} } },
+  "you_answered_fmt": "You answered: {answer}",
+  "@you_answered_fmt": { "placeholders": { "answer": {} } },
+  "correct_fmt": "Correct: {answer}",
+  "@correct_fmt": { "placeholders": { "answer": {} } },
+
+  "howto_repeat_addition_explain_fmt": "{a} × {b} means add {b} a total of {a} times (or add {a} a total of {b} times).",
+  "@howto_repeat_addition_explain_fmt": {
+    "placeholders": {
+      "a": { "type": "int" },
+      "b": { "type": "int" }
+    }
+  },
+
+  "howto_step_continue_fmt": "…and we reach {result}.",
+  "@howto_step_continue_fmt": {
+    "placeholders": { "result": { "type": "int" } }
+  },
+
+  "howto_nine_trick_title": "💡 9-times table trick:",
+  "howto_nine_trick_explain_fmt": "9 × {n} = (10 × {n}) − {n} = {tenTimes} − {n} = {minusOther}",
+  "@howto_nine_trick_explain_fmt": {
+    "placeholders": {
+      "n": { "type": "int" },
+      "tenTimes": { "type": "int" },
+      "minusOther": { "type": "int" }
+    }
+  },
+
+  "tip_zero_property": "0×N = 0; N×0 = 0.",
+  "tip_one_property": "1×N = N; N×1 = N.",
+  "tip_table_2_fmt": "×2: just double it. E.g., 2 × {other} = {other} + {other}.",
+  "@tip_table_2_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_3": "×3: think of adding 3 each time: 3, 6, 9, 12, 15, 18…",
+  "tip_table_4": "×4: double twice. E.g., 4 × n = (2 × n) × 2.",
+  "tip_table_5": "×5: ends with 0 or 5 (even → 0, odd → 5).",
+  "tip_table_6_fmt": "×6: think 5 × {other} + {other}.",
+  "@tip_table_6_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_7_fmt": "×7: think 5 × {other} + 2 × {other}.",
+  "@tip_table_7_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_8_fmt": "×8: double the double. E.g., 8 × {other} = (4 × {other}) × 2.",
+  "@tip_table_8_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "tip_table_9_note": "×9: the sum of the digits often equals 9 (e.g., 9×4=36 → 3+6=9).",
+  "tip_table_10_fmt": "×10: just append a zero. E.g., 10 × {other} = {other}0.",
+  "@tip_table_10_fmt": { "placeholders": { "other": { "type": "int" } } },
+
+  "errors_need_active_player": "Activate a player to train your mistakes.",
+  "errors_not_enough": "We don’t have enough mistakes yet.\nPlay a few rounds first 😉",
+  "label_from": "From",
+  "label_to": "To",
+  "word_to": "to",
+  "btn_cancel": "Cancel",
+  "btn_play": "Play",
+
+  "players_add_title": "New player",
+  "players_info": "Each player can have their own language, preferred mode, and difficulty (1 to 10). This helps adults tailor practice without mixing kids' progress.",
+  "players_new": "New player",
+  "players_current": "CURRENT",
+
+  "tooltip_activate": "Activate",
+  "tooltip_edit": "Edit",
+  "tooltip_delete": "Delete",
+
+  "label_name": "Name",
+  "name_hint": "E.g., Ana, John...",
+  "difficulty_hint": "Difficulty (1 easy, 10 fast)",
+  "save_player": "Save player",
+
+  "players_edit_title": "Edit player",
+  "save_changes": "Save changes",
+
+  "players_delete_title": "Delete player",
+  "players_delete_confirm_fmt": "Are you sure you want to delete '{name}'? This cannot be undone.",
+  "@players_delete_confirm_fmt": { "placeholders": { "name": {} } },
+
+  "cancel": "Cancel",
+  "delete": "Delete",
+
+  "lang_portuguese": "Portuguese",
+  "lang_english": "English",
+  "lang_spanish": "Spanish",
+
+  "mode_addition": "Addition",
+  "mode_subtraction": "Subtraction",
+  "mode_division": "Division",
+
+  "settings_title": "Settings",
+  "settings_body": "Coming soon:\n• Choose interface language\n• Pedagogical settings\n• Default difficulty\n",
+  "stats_title": "Statistics",
+  "refresh": "Refresh",
+  "stats_no_player_hint": "No active player.\nChoose or create a player.",
+  "stats_player_fmt": "Player: {name}",
+  "@stats_player_fmt": { "placeholders": { "name": {} } },
+  "stats_overall": "Overall summary",
+  "stats_total_questions_fmt": "Total questions: {total}",
+  "@stats_total_questions_fmt": { "placeholders": { "total": { "type": "int" } } },
+  "hits_only_fmt": "Hits: {hits}",
+  "@hits_only_fmt": { "placeholders": { "hits": { "type": "int" } } },
+  "stats_success_rate_na": "Success rate: —",
+  "stats_success_rate_fmt": "Success rate: {percent}",
+  "@stats_success_rate_fmt": { "placeholders": { "percent": {} } },
+  "stats_by_table": "By table",
+  "stats_by_table_empty": "We don’t have per-table data yet.\nPlay a round!",
+  "stats_hits_over_total_percent_fmt": "Hits: {hits}/{total} ({percent})",
+  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } }
+
+
 }
+

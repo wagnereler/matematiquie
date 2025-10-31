@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:math_lite/l10n/l10n.dart';
 import '../../application/players_cubit.dart';
 import '../../domain/attempts_repository.dart';
 
@@ -11,6 +12,7 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final activePlayer = context.watch<PlayersCubit>().state.activePlayer;
     final attemptsRepo = context.read<AttemptsRepository>();
 
@@ -21,20 +23,23 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
     Future<void> _goErrors() async {
       if (activePlayer == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Ative um jogador para treinar os erros.")),
+          SnackBar(content: Text(l10n.errors_need_active_player)),
         );
         return;
       }
-      final pairs = await attemptsRepo.getWorstPairsForPlayer(activePlayer.id, limit: 10);
+      final pairs =
+          await attemptsRepo.getWorstPairsForPlayer(activePlayer.id, limit: 10);
       if (pairs.isEmpty) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Ainda não temos erros suficientes.\nJogue algumas rodadas primeiro 😉")),
+            SnackBar(content: Text(l10n.errors_not_enough)),
           );
         }
         return;
       }
-      if (context.mounted) context.go('/train/multiplication/play?table=errors');
+      if (context.mounted) {
+        context.go('/train/multiplication/play?table=errors');
+      }
     }
 
     Future<void> _goRandom() async {
@@ -42,7 +47,8 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
       if (range == null) return;
       final (minBase, maxBase) = range;
       if (context.mounted) {
-        context.go('/train/multiplication/play?table=random_${minBase}_${maxBase}');
+        context.go(
+            '/train/multiplication/play?table=random_${minBase}_${maxBase}');
       }
     }
 
@@ -52,7 +58,7 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
           onPressed: () => context.go('/'),
           icon: const Icon(Icons.arrow_back),
         ),
-        title: const Text("Treinar multiplicação"),
+        title: Text(l10n.mult_select_title),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -67,38 +73,74 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _TableButton(topText: "2", bottomText: "x2", onTap: () => _goFixedTable(2)),
+                        _TableButton(
+                          topText: "2",
+                          bottomText: "x2",
+                          onTap: () => _goFixedTable(2),
+                        ),
                         const SizedBox(width: 12),
-                        _TableButton(topText: "3", bottomText: "x3", onTap: () => _goFixedTable(3)),
+                        _TableButton(
+                          topText: "3",
+                          bottomText: "x3",
+                          onTap: () => _goFixedTable(3),
+                        ),
                         const SizedBox(width: 12),
-                        _TableButton(topText: "4", bottomText: "x4", onTap: () => _goFixedTable(4)),
+                        _TableButton(
+                          topText: "4",
+                          bottomText: "x4",
+                          onTap: () => _goFixedTable(4),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _TableButton(topText: "5", bottomText: "x5", onTap: () => _goFixedTable(5)),
+                        _TableButton(
+                          topText: "5",
+                          bottomText: "x5",
+                          onTap: () => _goFixedTable(5),
+                        ),
                         const SizedBox(width: 12),
-                        _TableButton(topText: "6", bottomText: "x6", onTap: () => _goFixedTable(6)),
+                        _TableButton(
+                          topText: "6",
+                          bottomText: "x6",
+                          onTap: () => _goFixedTable(6),
+                        ),
                         const SizedBox(width: 12),
-                        _TableButton(topText: "7", bottomText: "x7", onTap: () => _goFixedTable(7)),
+                        _TableButton(
+                          topText: "7",
+                          bottomText: "x7",
+                          onTap: () => _goFixedTable(7),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _TableButton(topText: "8", bottomText: "x8", onTap: () => _goFixedTable(8)),
+                        _TableButton(
+                          topText: "8",
+                          bottomText: "x8",
+                          onTap: () => _goFixedTable(8),
+                        ),
                         const SizedBox(width: 12),
-                        _TableButton(topText: "9", bottomText: "x9", onTap: () => _goFixedTable(9)),
+                        _TableButton(
+                          topText: "9",
+                          bottomText: "x9",
+                          onTap: () => _goFixedTable(9),
+                        ),
                         const SizedBox(width: 12),
-                        _TableButton(topText: "🎯", bottomText: "Erros", onTap: _goErrors),
+                        _TableButton(
+                          topText: "🎯",
+                          bottomText: l10n.mult_errors,
+                          onTap: _goErrors,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
 
-                    // Aleatório expandido — usando EMOJI 🎲 (sem Icon)
+                    // Aleatório expandido — usando emoji 🎲
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: Row(
@@ -109,7 +151,7 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
                           Expanded(
                             child: _TableButton(
                               topText: "🎲",
-                              bottomText: "Aleatório",
+                              bottomText: l10n.mult_random,
                               onTap: _goRandom,
                               expanded: true,
                             ),
@@ -121,14 +163,14 @@ class MultiplicationTableSelectScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 24),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Text(
-                        "'Erros' foca nas contas que você mais errou (ex: 7×5).\n"
-                        "'Aleatório' mistura tabuadas num intervalo que você escolhe.\n"
-                        "Cada rodada tem 10 perguntas e salva tudo no histórico.",
+                        '${l10n.tip_footnote1}\n'
+                        '${l10n.tip_footnote2}\n'
+                        '${l10n.tip_footnote3}',
                         textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 14, height: 1.4),
+                        style: const TextStyle(fontSize: 14, height: 1.4),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -176,7 +218,10 @@ class _TableButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(topText, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+          Text(
+            topText,
+            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 4),
           Text(
             bottomText,
@@ -187,11 +232,14 @@ class _TableButton extends StatelessWidget {
       ),
     );
 
-    return expanded ? SizedBox(height: 80, child: btn) : SizedBox(width: 80, height: 80, child: btn);
+    return expanded
+        ? SizedBox(height: 80, child: btn)
+        : SizedBox(width: 80, height: 80, child: btn);
   }
 }
 
 Future<(int, int)?> _askRandomRangeDialog(BuildContext context) async {
+  final l10n = context.l10n;
   final minCtrl = TextEditingController(text: "2");
   final maxCtrl = TextEditingController(text: "10");
 
@@ -199,15 +247,13 @@ Future<(int, int)?> _askRandomRangeDialog(BuildContext context) async {
     context: context,
     builder: (ctx) {
       return AlertDialog(
-        title: const Text("Treino aleatório"),
+        title: Text(l10n.mult_random_title),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Escolha o intervalo de tabuadas que quer misturar.\n"
-              "Exemplo: de 2 até 10.\n"
-              "Você também pode usar valores maiores (11 até 20, etc).",
-              style: TextStyle(fontSize: 14, height: 1.4),
+            Text(
+              l10n.mult_random_desc,
+              style: const TextStyle(fontSize: 14, height: 1.4),
             ),
             const SizedBox(height: 16),
             Row(
@@ -216,22 +262,22 @@ Future<(int, int)?> _askRandomRangeDialog(BuildContext context) async {
                   child: TextField(
                     controller: minCtrl,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "De",
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.label_from,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Text("até"),
+                Text(l10n.word_to),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
                     controller: maxCtrl,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: "Até",
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: l10n.label_to,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -240,14 +286,17 @@ Future<(int, int)?> _askRandomRangeDialog(BuildContext context) async {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(ctx).pop(null), child: const Text("Cancelar")),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(null),
+            child: Text(l10n.btn_cancel),
+          ),
           ElevatedButton(
             onPressed: () {
               final minVal = int.tryParse(minCtrl.text) ?? 2;
               final maxVal = int.tryParse(maxCtrl.text) ?? 10;
               Navigator.of(ctx).pop((minVal, maxVal));
             },
-            child: const Text("Jogar"),
+            child: Text(l10n.btn_play),
           ),
         ],
       );
