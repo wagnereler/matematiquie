@@ -187,9 +187,54 @@
   "stats_by_table": "Por tabla",
   "stats_by_table_empty": "Aún no tenemos datos por tabla.\n¡Juega una ronda!",
   "stats_hits_over_total_percent_fmt": "Aciertos: {hits}/{total} ({percent})",
-  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } }
+  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } },
+
+  "play_addition": "Adición (＋)",
+
+  "add_select_title": "Entrenar adición",
+  "add_parcels_label": "Sumandos",
+  "add_level_label": "Nivel",
+  "add_decimals_label": "Incluir decimales",
+  "add_decimal_places_label": "Cifras (1–9)",
+  "add_play": "Jugar",
+
+  "add_fill_all": "Completa todos los campos.",
+  "add_correct_title": "¡Todo correcto!",
+  "add_feedback_ok": "¡Muy bien! Tu suma es correcta.",
+  "add_new_problem": "Nuevo ejercicio",
+
+  "add_incorrect_title": "Revisa tu cuenta",
+  "add_feedback_wrong_fmt": "En la columna {col}, el subtotal fue {subtotal}. El dígito esperado es {expDigit} y el acarreo es {expCarry}.",
+  "@add_feedback_wrong_fmt": {
+    "placeholders": {
+      "col": {"type": "int"},
+      "subtotal": {"type": "int"},
+      "expDigit": {"type": "int"},
+      "expCarry": {"type": "int"}
+    }
+  },
+
+  "add_game_title": "Adición",
+  "add_plus_sign_hint": "El signo '+' indica adición.",
+  "add_verify": "Verificar",
 
 
+  "add_level_header_fmt": "Nivel {level} (10^{pow})",
+  "@add_level_header_fmt": {
+    "placeholders": { "level": { "type": "int" }, "pow": { "type": "int" } }
+  },
 
+  "add_level_item_fmt": "Nivel {n}",
+  "@add_level_item_fmt": { "placeholders": { "n": { "type": "int" } } },
+
+  "add_level_mapping_hint": "Mapeo: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.",
+
+  "add_decimals_hint": "Al activar, siempre usa 2 cifras decimales.",
+
+  "legend_places": "Leyenda: u=unidad, d=decena, c=centena, m=millar, dm=decenas de millar, cm=centenas de millar, um=unidad de millón, dmm=decenas de millón, cmm=centenas de millón, mil=mil millones.",
+  "legend_decimal_sep_fmt": "Separador decimal: \"{sep}\"",
+  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } }
+  
 }
+
 

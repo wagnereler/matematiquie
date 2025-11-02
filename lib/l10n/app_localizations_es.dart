@@ -415,4 +415,78 @@ class AppLocalizationsEs extends AppLocalizations {
   String stats_hits_over_total_percent_fmt(int hits, int total, Object percent) {
     return 'Aciertos: $hits/$total ($percent)';
   }
+
+  @override
+  String get play_addition => 'Adición (＋)';
+
+  @override
+  String get add_select_title => 'Entrenar adición';
+
+  @override
+  String get add_parcels_label => 'Sumandos';
+
+  @override
+  String get add_level_label => 'Nivel';
+
+  @override
+  String get add_decimals_label => 'Incluir decimales';
+
+  @override
+  String get add_decimal_places_label => 'Cifras (1–9)';
+
+  @override
+  String get add_play => 'Jugar';
+
+  @override
+  String get add_fill_all => 'Completa todos los campos.';
+
+  @override
+  String get add_correct_title => '¡Todo correcto!';
+
+  @override
+  String get add_feedback_ok => '¡Muy bien! Tu suma es correcta.';
+
+  @override
+  String get add_new_problem => 'Nuevo ejercicio';
+
+  @override
+  String get add_incorrect_title => 'Revisa tu cuenta';
+
+  @override
+  String add_feedback_wrong_fmt(int col, int subtotal, int expDigit, int expCarry) {
+    return 'En la columna $col, el subtotal fue $subtotal. El dígito esperado es $expDigit y el acarreo es $expCarry.';
+  }
+
+  @override
+  String get add_game_title => 'Adición';
+
+  @override
+  String get add_plus_sign_hint => 'El signo \'+\' indica adición.';
+
+  @override
+  String get add_verify => 'Verificar';
+
+  @override
+  String add_level_header_fmt(int level, int pow) {
+    return 'Nivel $level (10^$pow)';
+  }
+
+  @override
+  String add_level_item_fmt(int n) {
+    return 'Nivel $n';
+  }
+
+  @override
+  String get add_level_mapping_hint => 'Mapeo: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.';
+
+  @override
+  String get add_decimals_hint => 'Al activar, siempre usa 2 cifras decimales.';
+
+  @override
+  String get legend_places => 'Leyenda: u=unidad, d=decena, c=centena, m=millar, dm=decenas de millar, cm=centenas de millar, um=unidad de millón, dmm=decenas de millón, cmm=centenas de millón, mil=mil millones.';
+
+  @override
+  String legend_decimal_sep_fmt(Object sep) {
+    return 'Separador decimal: \"$sep\"';
+  }
 }

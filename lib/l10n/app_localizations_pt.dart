@@ -415,4 +415,78 @@ class AppLocalizationsPt extends AppLocalizations {
   String stats_hits_over_total_percent_fmt(int hits, int total, Object percent) {
     return 'Acertos: $hits/$total ($percent)';
   }
+
+  @override
+  String get play_addition => 'Adição (＋)';
+
+  @override
+  String get add_select_title => 'Treinar adição';
+
+  @override
+  String get add_parcels_label => 'Parcelas';
+
+  @override
+  String get add_level_label => 'Nível';
+
+  @override
+  String get add_decimals_label => 'Incluir casas decimais';
+
+  @override
+  String get add_decimal_places_label => 'Quantidade (1–9)';
+
+  @override
+  String get add_play => 'Jogar';
+
+  @override
+  String get add_fill_all => 'Preencha todos os campos.';
+
+  @override
+  String get add_correct_title => 'Tudo certo!';
+
+  @override
+  String get add_feedback_ok => 'Parabéns! Sua soma está correta.';
+
+  @override
+  String get add_new_problem => 'Novo desafio';
+
+  @override
+  String get add_incorrect_title => 'Confira sua conta';
+
+  @override
+  String add_feedback_wrong_fmt(int col, int subtotal, int expDigit, int expCarry) {
+    return 'Na coluna $col, o subtotal foi $subtotal. O dígito esperado é $expDigit e o vai-um (excedente) é $expCarry.';
+  }
+
+  @override
+  String get add_game_title => 'Adição';
+
+  @override
+  String get add_plus_sign_hint => 'O sinal \'+\' identifica que é uma adição.';
+
+  @override
+  String get add_verify => 'Verificar';
+
+  @override
+  String add_level_header_fmt(int level, int pow) {
+    return 'Nível $level (10^$pow)';
+  }
+
+  @override
+  String add_level_item_fmt(int n) {
+    return 'Nível $n';
+  }
+
+  @override
+  String get add_level_mapping_hint => 'Mapeamento: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.';
+
+  @override
+  String get add_decimals_hint => 'Ao ativar, sempre usa 2 casas decimais.';
+
+  @override
+  String get legend_places => 'Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, um=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.';
+
+  @override
+  String legend_decimal_sep_fmt(Object sep) {
+    return 'Separador decimal: \"$sep\"';
+  }
 }

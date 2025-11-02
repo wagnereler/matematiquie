@@ -187,7 +187,82 @@
   "stats_by_table": "Por tabuada",
   "stats_by_table_empty": "Ainda não temos dados por tabuada.\nJogue uma rodada!",
   "stats_hits_over_total_percent_fmt": "Acertos: {hits}/{total} ({percent})",
-  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } }
+  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } },
+
+  "play_addition": "Adição (+)",
+  "add_select_title": "Opções de adição",
+  "add_parcels_label": "Parcelas (2 a 5)",
+  "add_level_label": "Nível (10^nível)",
+  "add_decimals_label": "Incluir casas decimais",
+  "add_decimal_places_label": "Quantidade de casas (1 a 9)",
+  "add_play": "Jogar",
+  "add_game_title": "Soma",
+  "add_plus_sign_hint": "O sinal '+' indica adição",
+  "add_verify": "Verificar",
+  "add_fill_all": "Preencha todos os dígitos do resultado para verificar.",
+  "add_correct_title": "Correto!",
+  "add_feedback_ok": "Parabéns! Sua soma está certa. Vamos para a próxima?",
+  "add_new_problem": "Nova conta",
+  "add_incorrect_title": "Há algo a ajustar",
+  "add_feedback_wrong_fmt": "Na coluna {col}, a soma parcial é {subtotal}. Portanto, escreva {digit} e leve {carry}.",
+  "@add_feedback_wrong_fmt": {
+    "placeholders": {
+      "col": {"type":"int"},
+      "subtotal": {"type":"int"},
+      "digit": {"type":"int"},
+      "carry": {"type":"int"}
+    }
+  },
+
+  "play_addition": "Adição (＋)",
+
+  "add_select_title": "Treinar adição",
+  "add_parcels_label": "Parcelas",
+  "add_level_label": "Nível",
+  "add_decimals_label": "Incluir casas decimais",
+  "add_decimal_places_label": "Quantidade (1–9)",
+  "add_play": "Jogar",
+
+  "add_fill_all": "Preencha todos os campos.",
+  "add_correct_title": "Tudo certo!",
+  "add_feedback_ok": "Parabéns! Sua soma está correta.",
+  "add_new_problem": "Novo desafio",
+
+  "add_incorrect_title": "Confira sua conta",
+  "add_feedback_wrong_fmt": "Na coluna {col}, o subtotal foi {subtotal}. O dígito esperado é {expDigit} e o vai-um (excedente) é {expCarry}.",
+  "@add_feedback_wrong_fmt": {
+    "placeholders": {
+      "col": {"type": "int"},
+      "subtotal": {"type": "int"},
+      "expDigit": {"type": "int"},
+      "expCarry": {"type": "int"}
+    }
+  },
+
+  "add_game_title": "Adição",
+  "add_plus_sign_hint": "O sinal '+' identifica que é uma adição.",
+  "add_verify": "Verificar",
+  
+  
+  "add_level_header_fmt": "Nível {level} (10^{pow})",
+  "@add_level_header_fmt": {
+    "placeholders": { "level": { "type": "int" }, "pow": { "type": "int" } }
+  },
+
+  "add_level_item_fmt": "Nível {n}",
+  "@add_level_item_fmt": { "placeholders": { "n": { "type": "int" } } },
+
+  "add_level_mapping_hint": "Mapeamento: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.",
+
+  "add_decimals_hint": "Ao ativar, sempre usa 2 casas decimais.",
+
+  "legend_places": "Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, um=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.",
+  "legend_decimal_sep_fmt": "Separador decimal: \"{sep}\"",
+  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } }
+  
+
 }
+
+
 
 

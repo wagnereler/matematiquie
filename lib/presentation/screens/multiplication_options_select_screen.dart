@@ -1,4 +1,4 @@
-// lib/presentation/screens/multiplication_table_select_screen.dart
+// lib/presentation/screens/multiplication_options_select_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,8 +7,8 @@ import 'package:math_lite/l10n/l10n.dart';
 import '../../application/players_cubit.dart';
 import '../../domain/attempts_repository.dart';
 
-class MultiplicationTableSelectScreen extends StatelessWidget {
-  const MultiplicationTableSelectScreen({super.key});
+class MultiplicationOptionsSelectScreen extends StatelessWidget {
+  const MultiplicationOptionsSelectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -816,6 +816,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hits: {hits}/{total} ({percent})'**
   String stats_hits_over_total_percent_fmt(int hits, int total, Object percent);
+
+  /// No description provided for @play_addition.
+  ///
+  /// In en, this message translates to:
+  /// **'Addition (＋)'**
+  String get play_addition;
+
+  /// No description provided for @add_select_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Train addition'**
+  String get add_select_title;
+
+  /// No description provided for @add_parcels_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Addends'**
+  String get add_parcels_label;
+
+  /// No description provided for @add_level_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Level'**
+  String get add_level_label;
+
+  /// No description provided for @add_decimals_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Include decimals'**
+  String get add_decimals_label;
+
+  /// No description provided for @add_decimal_places_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Places (1–9)'**
+  String get add_decimal_places_label;
+
+  /// No description provided for @add_play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get add_play;
+
+  /// No description provided for @add_fill_all.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all fields.'**
+  String get add_fill_all;
+
+  /// No description provided for @add_correct_title.
+  ///
+  /// In en, this message translates to:
+  /// **'All correct!'**
+  String get add_correct_title;
+
+  /// No description provided for @add_feedback_ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice job! Your sum is correct.'**
+  String get add_feedback_ok;
+
+  /// No description provided for @add_new_problem.
+  ///
+  /// In en, this message translates to:
+  /// **'New problem'**
+  String get add_new_problem;
+
+  /// No description provided for @add_incorrect_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your work'**
+  String get add_incorrect_title;
+
+  /// No description provided for @add_feedback_wrong_fmt.
+  ///
+  /// In en, this message translates to:
+  /// **'At column {col}, the subtotal was {subtotal}. Expected digit is {expDigit} and carry is {expCarry}.'**
+  String add_feedback_wrong_fmt(int col, int subtotal, int expDigit, int expCarry);
+
+  /// No description provided for @add_game_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Addition'**
+  String get add_game_title;
+
+  /// No description provided for @add_plus_sign_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'The \'+\' sign marks addition.'**
+  String get add_plus_sign_hint;
+
+  /// No description provided for @add_verify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get add_verify;
+
+  /// No description provided for @add_level_header_fmt.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level} (10^{pow})'**
+  String add_level_header_fmt(int level, int pow);
+
+  /// No description provided for @add_level_item_fmt.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {n}'**
+  String add_level_item_fmt(int n);
+
+  /// No description provided for @add_level_mapping_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mapping: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.'**
+  String get add_level_mapping_hint;
+
+  /// No description provided for @add_decimals_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'When enabled, it always uses 2 decimal places.'**
+  String get add_decimals_hint;
+
+  /// No description provided for @legend_places.
+  ///
+  /// In en, this message translates to:
+  /// **'Legend: u=unit, d=ten, c=hundred, k=thousand, 10k=ten-thousand, 100k=hundred-thousand, m=million, 10m=ten-million, 100m=hundred-million, b=billion.'**
+  String get legend_places;
+
+  /// No description provided for @legend_decimal_sep_fmt.
+  ///
+  /// In en, this message translates to:
+  /// **'Decimal separator: \"{sep}\"'**
+  String legend_decimal_sep_fmt(Object sep);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -415,4 +415,78 @@ class AppLocalizationsEn extends AppLocalizations {
   String stats_hits_over_total_percent_fmt(int hits, int total, Object percent) {
     return 'Hits: $hits/$total ($percent)';
   }
+
+  @override
+  String get play_addition => 'Addition (＋)';
+
+  @override
+  String get add_select_title => 'Train addition';
+
+  @override
+  String get add_parcels_label => 'Addends';
+
+  @override
+  String get add_level_label => 'Level';
+
+  @override
+  String get add_decimals_label => 'Include decimals';
+
+  @override
+  String get add_decimal_places_label => 'Places (1–9)';
+
+  @override
+  String get add_play => 'Play';
+
+  @override
+  String get add_fill_all => 'Please fill all fields.';
+
+  @override
+  String get add_correct_title => 'All correct!';
+
+  @override
+  String get add_feedback_ok => 'Nice job! Your sum is correct.';
+
+  @override
+  String get add_new_problem => 'New problem';
+
+  @override
+  String get add_incorrect_title => 'Check your work';
+
+  @override
+  String add_feedback_wrong_fmt(int col, int subtotal, int expDigit, int expCarry) {
+    return 'At column $col, the subtotal was $subtotal. Expected digit is $expDigit and carry is $expCarry.';
+  }
+
+  @override
+  String get add_game_title => 'Addition';
+
+  @override
+  String get add_plus_sign_hint => 'The \'+\' sign marks addition.';
+
+  @override
+  String get add_verify => 'Verify';
+
+  @override
+  String add_level_header_fmt(int level, int pow) {
+    return 'Level $level (10^$pow)';
+  }
+
+  @override
+  String add_level_item_fmt(int n) {
+    return 'Level $n';
+  }
+
+  @override
+  String get add_level_mapping_hint => 'Mapping: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.';
+
+  @override
+  String get add_decimals_hint => 'When enabled, it always uses 2 decimal places.';
+
+  @override
+  String get legend_places => 'Legend: u=unit, d=ten, c=hundred, k=thousand, 10k=ten-thousand, 100k=hundred-thousand, m=million, 10m=ten-million, 100m=hundred-million, b=billion.';
+
+  @override
+  String legend_decimal_sep_fmt(Object sep) {
+    return 'Decimal separator: \"$sep\"';
+  }
 }

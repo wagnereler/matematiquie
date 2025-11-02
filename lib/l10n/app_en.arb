@@ -186,8 +186,54 @@
   "stats_by_table": "By table",
   "stats_by_table_empty": "We don’t have per-table data yet.\nPlay a round!",
   "stats_hits_over_total_percent_fmt": "Hits: {hits}/{total} ({percent})",
-  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } }
+  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } },
+
+  "play_addition": "Addition (＋)",
+
+  "add_select_title": "Train addition",
+  "add_parcels_label": "Addends",
+  "add_level_label": "Level",
+  "add_decimals_label": "Include decimals",
+  "add_decimal_places_label": "Places (1–9)",
+  "add_play": "Play",
+
+  "add_fill_all": "Please fill all fields.",
+  "add_correct_title": "All correct!",
+  "add_feedback_ok": "Nice job! Your sum is correct.",
+  "add_new_problem": "New problem",
+
+  "add_incorrect_title": "Check your work",
+  "add_feedback_wrong_fmt": "At column {col}, the subtotal was {subtotal}. Expected digit is {expDigit} and carry is {expCarry}.",
+  "@add_feedback_wrong_fmt": {
+    "placeholders": {
+      "col": {"type": "int"},
+      "subtotal": {"type": "int"},
+      "expDigit": {"type": "int"},
+      "expCarry": {"type": "int"}
+    }
+  },
+
+  "add_game_title": "Addition",
+  "add_plus_sign_hint": "The '+' sign marks addition.",
+  "add_verify": "Verify",
 
 
+  "add_level_header_fmt": "Level {level} (10^{pow})",
+  "@add_level_header_fmt": {
+    "placeholders": { "level": { "type": "int" }, "pow": { "type": "int" } }
+  },
+
+  "add_level_item_fmt": "Level {n}",
+  "@add_level_item_fmt": { "placeholders": { "n": { "type": "int" } } },
+
+  "add_level_mapping_hint": "Mapping: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.",
+
+  "add_decimals_hint": "When enabled, it always uses 2 decimal places.",
+
+  "legend_places": "Legend: u=unit, d=ten, c=hundred, k=thousand, 10k=ten-thousand, 100k=hundred-thousand, m=million, 10m=ten-million, 100m=hundred-million, b=billion.",
+  "legend_decimal_sep_fmt": "Decimal separator: \"{sep}\"",
+  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } }
+  
 }
+
 
