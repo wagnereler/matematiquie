@@ -6,6 +6,7 @@ class ProfilePrefs {
   ProfilePrefs(this._prefs);
 
   static const _kActivePlayerId = 'active_player_id';
+  static const _kThemeMode = 'theme_mode'; // 'system' | 'light' | 'dark'
 
   int? getActivePlayerId() {
     final v = _prefs.getInt(_kActivePlayerId);
@@ -18,5 +19,14 @@ class ProfilePrefs {
 
   Future<void> clearActivePlayerId() async {
     await _prefs.remove(_kActivePlayerId);
+  }
+
+  // ===== Tema do app (persistido como string p/ não acoplar à UI)
+  String getThemeModeCode() {
+    return _prefs.getString(_kThemeMode) ?? 'system';
+  }
+
+  Future<void> setThemeModeCode(String code) async {
+    await _prefs.setString(_kThemeMode, code);
   }
 }

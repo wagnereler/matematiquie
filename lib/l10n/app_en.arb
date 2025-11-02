@@ -232,7 +232,13 @@
 
   "legend_places": "Legend: u=unit, d=ten, c=hundred, k=thousand, 10k=ten-thousand, 100k=hundred-thousand, m=million, 10m=ten-million, 100m=hundred-million, b=billion.",
   "legend_decimal_sep_fmt": "Decimal separator: \"{sep}\"",
-  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } }
+  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } },
+
+  "settings_theme_title": "App theme",
+  "settings_theme_system": "Follow system",
+  "settings_theme_light": "Light",
+  "settings_theme_dark": "Dark",
+  "go_home": "Go to Home"
   
 }
 

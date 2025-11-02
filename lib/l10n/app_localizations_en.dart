@@ -489,4 +489,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String legend_decimal_sep_fmt(Object sep) {
     return 'Decimal separator: \"$sep\"';
   }
+
+  @override
+  String get settings_theme_title => 'App theme';
+
+  @override
+  String get settings_theme_system => 'Follow system';
+
+  @override
+  String get settings_theme_light => 'Light';
+
+  @override
+  String get settings_theme_dark => 'Dark';
+
+  @override
+  String get go_home => 'Go to Home';
 }

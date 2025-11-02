@@ -948,6 +948,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Decimal separator: \"{sep}\"'**
   String legend_decimal_sep_fmt(Object sep);
+
+  /// No description provided for @settings_theme_title.
+  ///
+  /// In en, this message translates to:
+  /// **'App theme'**
+  String get settings_theme_title;
+
+  /// No description provided for @settings_theme_system.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow system'**
+  String get settings_theme_system;
+
+  /// No description provided for @settings_theme_light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settings_theme_light;
+
+  /// No description provided for @settings_theme_dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get settings_theme_dark;
+
+  /// No description provided for @go_home.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Home'**
+  String get go_home;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

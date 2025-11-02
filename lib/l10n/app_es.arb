@@ -233,8 +233,14 @@
 
   "legend_places": "Leyenda: u=unidad, d=decena, c=centena, m=millar, dm=decenas de millar, cm=centenas de millar, um=unidad de millón, dmm=decenas de millón, cmm=centenas de millón, mil=mil millones.",
   "legend_decimal_sep_fmt": "Separador decimal: \"{sep}\"",
-  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } }
+  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } },
   
+  "settings_theme_title": "Tema de la app",
+  "settings_theme_system": "Seguir el sistema",
+  "settings_theme_light": "Claro",
+  "settings_theme_dark": "Oscuro",
+  "go_home": "Ir al inicio"
+
 }
 
 

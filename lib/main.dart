@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'application/settings_cubit.dart';
 import 'l10n/app_localizations.dart'; // gerado pelo gen-l10n
 import 'l10n/l10n.dart';
 import 'routes/app_router.dart';
@@ -75,10 +75,14 @@ class MatematiqueiApp extends StatelessWidget {
               prefs: profilePrefs,
             )..load(),
           ),
+          BlocProvider<SettingsCubit>(
+            create: (_) => SettingsCubit(prefs: profilePrefs),
+          ),          
         ],
         child: Builder(
           builder: (context) {
             final locale = context.select((PlayersCubit c) => c.uiLocale);
+            final themeMode = context.select((SettingsCubit c) => c.state.themeMode);
 
             return MaterialApp.router(
               debugShowCheckedModeBanner: false,
@@ -107,7 +111,7 @@ class MatematiqueiApp extends StatelessWidget {
                 brightness: Brightness.dark,
                 colorSchemeSeed: Colors.indigo,
               ),
-              themeMode: ThemeMode.system,
+              themeMode: themeMode,
             );
           },
         ),

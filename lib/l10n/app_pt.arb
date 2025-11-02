@@ -258,7 +258,12 @@
 
   "legend_places": "Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, um=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.",
   "legend_decimal_sep_fmt": "Separador decimal: \"{sep}\"",
-  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } }
+  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } },
+  "settings_theme_title": "Tema do app",
+  "settings_theme_system": "Seguir o sistema",
+  "settings_theme_light": "Claro",
+  "settings_theme_dark": "Escuro",
+  "go_home": "Ir para a Home"  
   
 
 }

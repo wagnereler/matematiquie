@@ -75,6 +75,13 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.amber,
         foregroundColor: Colors.black,
         centerTitle: true,
+        actions: [
+          IconButton(
+            tooltip: context.l10n.settings_title,
+            onPressed: () => context.push('/settings'), // empilha a rota
+            icon: const Icon(Icons.settings),
+          ),
+        ],        
       ),
       backgroundColor: const Color(0xFFFFF8E6),
       body: Center(

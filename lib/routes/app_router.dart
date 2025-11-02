@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
+import '../presentation/screens/settings_screen.dart';
 import '../presentation/screens/home_screen.dart';
 import '../presentation/screens/play_screen.dart';
 import '../presentation/screens/multiplication_options_select_screen.dart';
@@ -27,6 +27,8 @@ class AppRouter {
         GoRoute(path: '/play', builder: (context, state) => const PlayScreen()),
         GoRoute(path: '/players', builder: (context, state) => const PlayerSelectScreen()),
         GoRoute(path: '/stats', builder: (context, state) => const StatisticsScreen()),
+        GoRoute(path: '/settings', builder: (context, state) => const SettingsScreen()),
+
 
         // ===================== Multiplicação =====================
         GoRoute(
