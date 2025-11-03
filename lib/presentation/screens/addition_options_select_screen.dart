@@ -94,15 +94,15 @@ class _AdditionOptionsSelectScreenState
             decoration: const InputDecoration(border: OutlineInputBorder()),
             items: [
               for (int i = 1; i <= 5; i++)
-                DropdownMenuItem(value: i, child: Text('Level $i')),
+                DropdownMenuItem(value: i, child: Text(l10n.addLevelItemFmt(i))),
             ],
             onChanged: (v) => setState(() => _selectedLevel = v ?? 1),
           ),
           const SizedBox(height: 6),
           // dica curta do mapeamento (sem depender de l10n)
-          const Text(
-            'Mapping: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.',
-            style: TextStyle(fontSize: 12, color: Colors.black54),
+          Text(
+            l10n.add_level_mapping_hint,
+            style: const TextStyle(fontSize: 12, color: Colors.black54),
           ),
 
           const SizedBox(height: 20),
@@ -111,7 +111,7 @@ class _AdditionOptionsSelectScreenState
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(l10n.add_decimals_label),
-            subtitle: const Text('When enabled, always uses 2 decimal places.'),
+            subtitle: Text(l10n.add_decimals_hint),
             value: _decimalsEnabled,
             onChanged: (v) => setState(() => _decimalsEnabled = v),
           ),
@@ -134,7 +134,7 @@ class _AdditionOptionsSelectScreenState
           const SizedBox(height: 16),
           // ===== Legenda (padrão: explicação/ajuda sob botões)
           Text(
-            _legendPlaces(context),
+            context.l10n.legendPlaces,
             style: const TextStyle(fontSize: 13, height: 1.35, color: Colors.black54),
           ),
         ],

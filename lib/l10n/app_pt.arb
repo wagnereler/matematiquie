@@ -1,13 +1,16 @@
 {
   "@@locale": "pt",
   "appTitle": "Matematiquei",
+
   "players_title": "Escolher jogador",
   "players_list": "Jogadores",
   "label_language": "Idioma",
   "label_mode": "Modo",
   "mode_multiplication": "Multiplicação",
+
   "difficulty_fmt": "Dificuldade: nível {level}/10",
   "@difficulty_fmt": { "placeholders": { "level": { "type": "int" } } },
+
   "btn_switch": "Trocar",
   "home_player": "Jogador",
   "home_level": "Nível",
@@ -16,18 +19,22 @@
   "home_play": "Treinar",
   "home_stats": "Estatísticas",
   "home_choose_player_hint": "Pratique todos os dias um pouquinho.\nComece devagar, priorize o acerto 🙂",
+
   "play_title": "Treinar",
   "play_chooseType": "Escolha o tipo de treino:",
   "play_multiplication": "Tabuada (×)",
+
   "mult_select_title": "Treinar multiplicação",
   "mult_choose_table": "Escolha a tabuada que quer estudar:",
   "mult_errors": "Erros",
   "mult_random": "Aleatório",
   "mult_random_title": "Treino aleatório",
   "mult_random_desc": "Escolha o intervalo de tabuadas que quer misturar. Ex.: 2 até 10. Você também pode usar valores maiores (11..20).",
+
   "tip_footnote1": "• 'Erros' foca nas contas que você mais errou (ex: 7×5).",
   "tip_footnote2": "• 'Aleatório' mistura tabuadas num intervalo que você escolhe.",
   "tip_footnote3": "• Cada rodada tem 10 perguntas e salva tudo no histórico.",
+
   "mult_session_title": "Tabuada do {table} ({current} / {total})",
   "@mult_session_title": {
     "placeholders": {
@@ -36,37 +43,40 @@
       "total": { "type": "int" }
     }
   },
+
   "hits_fmt": "Acertos: {hits}/{round}",
   "@hits_fmt": { "placeholders": { "hits": {}, "round": {} } },
   "time_secs_fmt": "Tempo: {secs} s",
   "@time_secs_fmt": { "placeholders": { "secs": {} } },
   "mult_choose_before_timeout": "Escolha a resposta antes do tempo acabar!",
+
   "howto_title": "Como pensar nessa conta:",
   "howto_repeat_addition": "💡 Pense como soma repetida:",
   "howto_step_by_step": "Exemplo de construção passo a passo:",
   "howto_doubling_helps": "💡 Dobrar ajuda:",
+
   "mult_tips_title": "📚 Dicas da tabuada:",
   "summary_label": "Resumo",
-  "btn_continue": "Continuar",
-  "btn_close": "Fechar",
-  "btn_exit": "Sair",
+  "btnContinue": "Continuar",
+  "btnClose": "Fechar",
+  "btnExit": "Sair",
   "btn_see_hint": "Ver dica",
   "no_hints_left": "Você não tem mais dicas disponíveis.",
+
   "hint_tooltip_fmt": "Dica ({count})",
   "@hint_tooltip_fmt": { "placeholders": { "count": { "type": "int" } } },
+
   "wrong_title": "Resposta incorreta",
   "wrong_explain_fmt": "A resposta correta é {correct} porque {a} × {b} = {correct}.\n\nQuer ver como chegar nesse resultado passo a passo?",
   "@wrong_explain_fmt": {
-    "placeholders": {
-      "a": { "type": "int" },
-      "b": { "type": "int" },
-      "correct": { "type": "int" }
-    }
+    "placeholders": { "a": { "type": "int" }, "b": { "type": "int" }, "correct": { "type": "int" } }
   },
+
   "quit_tooltip": "Sair",
   "quit_title": "Encerrar treino?",
   "quit_content": "Se você sair agora, essa rodada vai terminar antes das 10 questões.",
   "quit_keep_playing": "Continuar jogando",
+
   "result_title": "Resultado",
   "result_performance_title": "Seu desempenho",
   "score_fmt": "{correct} / {total} acertos",
@@ -77,6 +87,7 @@
   "play_again": "Jogar de novo",
   "back_home": "Voltar para início",
   "no_answer": "— (sem resposta)",
+
   "attempt_question_fmt": "Pergunta {number}: {qText}",
   "@attempt_question_fmt": { "placeholders": { "number": { "type": "int" }, "qText": {} } },
   "you_answered_fmt": "Você respondeu: {answer}",
@@ -85,50 +96,33 @@
   "@correct_fmt": { "placeholders": { "answer": {} } },
 
   "howto_repeat_addition_explain_fmt": "{a} × {b} quer dizer somar {b} um total de {a} vezes (ou somar {a} um total de {b} vezes).",
-  "@howto_repeat_addition_explain_fmt": {
-    "placeholders": {
-      "a": { "type": "int" },
-      "b": { "type": "int" }
-    }
-  },
-
+  "@howto_repeat_addition_explain_fmt": { "placeholders": { "a": { "type": "int" }, "b": { "type": "int" } } },
   "howto_step_continue_fmt": "continuando assim chegamos em {result}.",
-  "@howto_step_continue_fmt": {
-    "placeholders": { "result": { "type": "int" } }
-  },
-
+  "@howto_step_continue_fmt": { "placeholders": { "result": { "type": "int" } } },
   "howto_nine_trick_title": "💡 Truque da tabuada do 9:",
   "howto_nine_trick_explain_fmt": "9 × {n} = (10 × {n}) − {n} = {tenTimes} − {n} = {minusOther}",
   "@howto_nine_trick_explain_fmt": {
-    "placeholders": {
-      "n": { "type": "int" },
-      "tenTimes": { "type": "int" },
-      "minusOther": { "type": "int" }
-    }
+    "placeholders": { "n": { "type": "int" }, "tenTimes": { "type": "int" }, "minusOther": { "type": "int" } }
   },
 
   "tip_zero_property": "0×N = 0; N×0 = 0.",
   "tip_one_property": "1×N = N; N×1 = N.",
   "tip_table_2_fmt": "Tabuada do 2: é só dobrar. Ex: 2 × {other} = {other} + {other}.",
   "@tip_table_2_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_3": "Tabuada do 3: pense em somar de 3 em 3: 3, 6, 9, 12, 15, 18...",
   "tip_table_4": "Tabuada do 4: dobre duas vezes. Ex: 4 × n = (2 × n) × 2.",
   "tip_table_5": "Tabuada do 5: termina em 0 ou 5 (par → 0, ímpar → 5).",
   "tip_table_6_fmt": "Tabuada do 6: pense 5 × {other} + {other}.",
   "@tip_table_6_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_7_fmt": "Tabuada do 7: pense 5 × {other} + 2 × {other}.",
   "@tip_table_7_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_8_fmt": "Tabuada do 8: dobro do dobro do dobro. Ex: 8 × {other} = (4 × {other}) × 2.",
   "@tip_table_8_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_9_note": "Tabuada do 9: a soma dos dígitos do resultado costuma dar 9 (ex.: 9×4=36 → 3+6=9).",
   "tip_table_10_fmt": "Tabuada do 10: basta colocar um zero no final. Ex: 10 × {other} = {other}0.",
   "@tip_table_10_fmt": { "placeholders": { "other": { "type": "int" } } },
-  "errors_need_active_player": "Ative um jogador para treinar os erros.",
 
+  "errors_need_active_player": "Ative um jogador para treinar os erros.",
   "errors_not_enough": "Ainda não temos erros suficientes.\nJogue algumas rodadas primeiro 😉",
   "label_from": "De",
   "label_to": "Até",
@@ -152,7 +146,6 @@
 
   "players_edit_title": "Editar jogador",
   "save_changes": "Salvar alterações",
-
   "players_delete_title": "Excluir jogador",
   "players_delete_confirm_fmt": "Tem certeza que deseja excluir '{name}'? Isso não pode ser desfeito.",
   "@players_delete_confirm_fmt": { "placeholders": { "name": {} } },
@@ -187,35 +180,11 @@
   "stats_by_table": "Por tabuada",
   "stats_by_table_empty": "Ainda não temos dados por tabuada.\nJogue uma rodada!",
   "stats_hits_over_total_percent_fmt": "Acertos: {hits}/{total} ({percent})",
-  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } },
-
-  "play_addition": "Adição (+)",
-  "add_select_title": "Opções de adição",
-  "add_parcels_label": "Parcelas (2 a 5)",
-  "add_level_label": "Nível (10^nível)",
-  "add_decimals_label": "Incluir casas decimais",
-  "add_decimal_places_label": "Quantidade de casas (1 a 9)",
-  "add_play": "Jogar",
-  "add_game_title": "Soma",
-  "add_plus_sign_hint": "O sinal '+' indica adição",
-  "add_verify": "Verificar",
-  "add_fill_all": "Preencha todos os dígitos do resultado para verificar.",
-  "add_correct_title": "Correto!",
-  "add_feedback_ok": "Parabéns! Sua soma está certa. Vamos para a próxima?",
-  "add_new_problem": "Nova conta",
-  "add_incorrect_title": "Há algo a ajustar",
-  "add_feedback_wrong_fmt": "Na coluna {col}, a soma parcial é {subtotal}. Portanto, escreva {digit} e leve {carry}.",
-  "@add_feedback_wrong_fmt": {
-    "placeholders": {
-      "col": {"type":"int"},
-      "subtotal": {"type":"int"},
-      "digit": {"type":"int"},
-      "carry": {"type":"int"}
-    }
+  "@stats_hits_over_total_percent_fmt": {
+    "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} }
   },
 
   "play_addition": "Adição (＋)",
-
   "add_select_title": "Treinar adição",
   "add_parcels_label": "Parcelas",
   "add_level_label": "Nível",
@@ -223,14 +192,14 @@
   "add_decimal_places_label": "Quantidade (1–9)",
   "add_play": "Jogar",
 
-  "add_fill_all": "Preencha todos os campos.",
-  "add_correct_title": "Tudo certo!",
-  "add_feedback_ok": "Parabéns! Sua soma está correta.",
+  "addFillAll": "Preencha todos os campos.",
+  "addCorrectTitle": "Tudo certo!",
+  "addFeedbackOk": "Parabéns! Sua soma está correta.",
   "add_new_problem": "Novo desafio",
 
-  "add_incorrect_title": "Confira sua conta",
-  "add_feedback_wrong_fmt": "Na coluna {col}, o subtotal foi {subtotal}. O dígito esperado é {expDigit} e o vai-um (excedente) é {expCarry}.",
-  "@add_feedback_wrong_fmt": {
+  "addIncorrectTitle": "Confira sua conta",
+  "addFeedbackWrongFmt": "Na coluna {col}, o subtotal foi {subtotal}. O dígito esperado é {expDigit} e o vai-um (excedente) é {expCarry}.",
+  "@addFeedbackWrongFmt": {
     "placeholders": {
       "col": {"type": "int"},
       "subtotal": {"type": "int"},
@@ -239,35 +208,28 @@
     }
   },
 
-  "add_game_title": "Adição",
-  "add_plus_sign_hint": "O sinal '+' identifica que é uma adição.",
-  "add_verify": "Verificar",
-  
-  
+  "addGameTitle": "Adição",
+  "addPlusSignHint": "O sinal '+' identifica que é uma adição.",
+  "addVerify": "Verificar",
+
   "add_level_header_fmt": "Nível {level} (10^{pow})",
   "@add_level_header_fmt": {
     "placeholders": { "level": { "type": "int" }, "pow": { "type": "int" } }
   },
-
-  "add_level_item_fmt": "Nível {n}",
-  "@add_level_item_fmt": { "placeholders": { "n": { "type": "int" } } },
-
+  "addLevelItemFmt": "Nível {n}",
+  "@addLevelItemFmt": { "placeholders": { "n": { "type": "int" } } },
   "add_level_mapping_hint": "Mapeamento: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.",
-
   "add_decimals_hint": "Ao ativar, sempre usa 2 casas decimais.",
 
-  "legend_places": "Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, um=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.",
-  "legend_decimal_sep_fmt": "Separador decimal: \"{sep}\"",
-  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } },
+  "legendPlaces": "Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, mi=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.",
+  "legendDecimalSepFmt": "Separador decimal: \"{sep}\"",
+  "@legendDecimalSepFmt": { "placeholders": { "sep": {} } },
+
   "settings_theme_title": "Tema do app",
   "settings_theme_system": "Seguir o sistema",
   "settings_theme_light": "Claro",
   "settings_theme_dark": "Escuro",
-  "go_home": "Ir para a Home"  
-  
+  "go_home": "Ir para a Home",
 
+  "placeAbbrevSeries": "u,d,c,m,dm,cm,mi,dmi,cmi,bi"
 }
-
-
-
-

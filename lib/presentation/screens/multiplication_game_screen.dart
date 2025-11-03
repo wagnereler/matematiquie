@@ -366,8 +366,8 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
                     onPressed: () => Navigator.of(ctx).pop(),
                     child: Text(
                       showContinueButton
-                          ? context.l10n.btn_continue
-                          : context.l10n.btn_close,
+                          ? context.l10n.btnContinue
+                          : context.l10n.btnClose,
                     ),
                   )
                 ],
@@ -465,7 +465,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
               onPressed: () {
                 Navigator.of(ctx).pop('cont');
               },
-              child: Text(context.l10n.btn_continue),
+              child: Text(context.l10n.btnContinue),
             ),
           ],
         );
@@ -641,7 +641,7 @@ class _MultiplicationGameScreenState extends State<MultiplicationGameScreen> {
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(ctx).pop(true),
-                child: Text(context.l10n.btn_exit),
+                child: Text(context.l10n.btnExit),
               ),
             ],
           ),

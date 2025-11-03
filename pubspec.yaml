@@ -34,7 +34,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/app_icon.png
-  generate: true   # habilita o gen_l10n (usa os padrões)
+  generate: true
+
 
 # Configuração do gerador de ícones
 flutter_launcher_icons:

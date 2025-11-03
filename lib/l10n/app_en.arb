@@ -1,13 +1,16 @@
 {
   "@@locale": "en",
   "appTitle": "MathShow",
+
   "players_title": "Choose player",
   "players_list": "Players",
   "label_language": "Language",
   "label_mode": "Mode",
   "mode_multiplication": "Multiplication",
+
   "difficulty_fmt": "Difficulty: level {level}/10",
   "@difficulty_fmt": { "placeholders": { "level": { "type": "int" } } },
+
   "btn_switch": "Switch",
   "home_player": "Player",
   "home_level": "Level",
@@ -16,18 +19,22 @@
   "home_play": "Train",
   "home_stats": "Statistics",
   "home_choose_player_hint": "Practice a little every day.\nStart slowly, prioritize accuracy 🙂",
+
   "play_title": "Train",
   "play_chooseType": "Choose a training type:",
   "play_multiplication": "Times Table (×)",
+
   "mult_select_title": "Train multiplication",
   "mult_choose_table": "Pick the table you want to study:",
   "mult_errors": "Missed",
   "mult_random": "Random",
   "mult_random_title": "Random training",
   "mult_random_desc": "Choose the range of tables to shuffle. E.g., 2 to 10. You can also use bigger ranges (11..20).",
+
   "tip_footnote1": "• “Missed” focuses on the pairs you missed most (e.g., 7×5).",
   "tip_footnote2": "• “Random” shuffles tables within your chosen range.",
   "tip_footnote3": "• Each round has 10 questions and records your history.",
+
   "mult_session_title": "Table of {table} ({current} / {total})",
   "@mult_session_title": {
     "placeholders": {
@@ -36,37 +43,39 @@
       "total": { "type": "int" }
     }
   },
+
   "hits_fmt": "Hits: {hits}/{round}",
   "@hits_fmt": { "placeholders": { "hits": {}, "round": {} } },
   "time_secs_fmt": "Time: {secs} s",
   "@time_secs_fmt": { "placeholders": { "secs": {} } },
   "mult_choose_before_timeout": "Choose the answer before time runs out!",
+
   "howto_title": "How to think about this:",
   "howto_repeat_addition": "💡 Think as repeated addition:",
   "howto_step_by_step": "Step-by-step example:",
   "howto_doubling_helps": "💡 Doubling helps:",
   "mult_tips_title": "📚 Times table tips:",
   "summary_label": "Summary",
-  "btn_continue": "Continue",
-  "btn_close": "Close",
-  "btn_exit": "Exit",
+  "btnContinue": "Continue",
+  "btnClose": "Close",
+  "btnExit": "Exit",
   "btn_see_hint": "See hint",
   "no_hints_left": "You have no hints left.",
+
   "hint_tooltip_fmt": "Hint ({count})",
   "@hint_tooltip_fmt": { "placeholders": { "count": { "type": "int" } } },
+
   "wrong_title": "Incorrect answer",
   "wrong_explain_fmt": "The correct answer is {correct} because {a} × {b} = {correct}.\n\nDo you want to see how to get this result step by step?",
   "@wrong_explain_fmt": {
-    "placeholders": {
-      "a": { "type": "int" },
-      "b": { "type": "int" },
-      "correct": { "type": "int" }
-    }
+    "placeholders": { "a": { "type": "int" }, "b": { "type": "int" }, "correct": { "type": "int" } }
   },
+
   "quit_tooltip": "Quit",
   "quit_title": "End training?",
   "quit_content": "If you exit now, this round will end before 10 questions.",
   "quit_keep_playing": "Keep playing",
+
   "result_title": "Results",
   "result_performance_title": "Your performance",
   "score_fmt": "{correct} / {total} correct",
@@ -77,6 +86,7 @@
   "play_again": "Play again",
   "back_home": "Back to home",
   "no_answer": "— (no answer)",
+
   "attempt_question_fmt": "Question {number}: {qText}",
   "@attempt_question_fmt": { "placeholders": { "number": { "type": "int" }, "qText": {} } },
   "you_answered_fmt": "You answered: {answer}",
@@ -85,45 +95,28 @@
   "@correct_fmt": { "placeholders": { "answer": {} } },
 
   "howto_repeat_addition_explain_fmt": "{a} × {b} means add {b} a total of {a} times (or add {a} a total of {b} times).",
-  "@howto_repeat_addition_explain_fmt": {
-    "placeholders": {
-      "a": { "type": "int" },
-      "b": { "type": "int" }
-    }
-  },
-
+  "@howto_repeat_addition_explain_fmt": { "placeholders": { "a": { "type": "int" }, "b": { "type": "int" } } },
   "howto_step_continue_fmt": "…and we reach {result}.",
-  "@howto_step_continue_fmt": {
-    "placeholders": { "result": { "type": "int" } }
-  },
-
+  "@howto_step_continue_fmt": { "placeholders": { "result": { "type": "int" } } },
   "howto_nine_trick_title": "💡 9-times table trick:",
   "howto_nine_trick_explain_fmt": "9 × {n} = (10 × {n}) − {n} = {tenTimes} − {n} = {minusOther}",
   "@howto_nine_trick_explain_fmt": {
-    "placeholders": {
-      "n": { "type": "int" },
-      "tenTimes": { "type": "int" },
-      "minusOther": { "type": "int" }
-    }
+    "placeholders": { "n": { "type": "int" }, "tenTimes": { "type": "int" }, "minusOther": { "type": "int" } }
   },
 
   "tip_zero_property": "0×N = 0; N×0 = 0.",
   "tip_one_property": "1×N = N; N×1 = N.",
   "tip_table_2_fmt": "×2: just double it. E.g., 2 × {other} = {other} + {other}.",
   "@tip_table_2_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_3": "×3: think of adding 3 each time: 3, 6, 9, 12, 15, 18…",
   "tip_table_4": "×4: double twice. E.g., 4 × n = (2 × n) × 2.",
   "tip_table_5": "×5: ends with 0 or 5 (even → 0, odd → 5).",
   "tip_table_6_fmt": "×6: think 5 × {other} + {other}.",
   "@tip_table_6_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_7_fmt": "×7: think 5 × {other} + 2 × {other}.",
   "@tip_table_7_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_8_fmt": "×8: double the double. E.g., 8 × {other} = (4 × {other}) × 2.",
   "@tip_table_8_fmt": { "placeholders": { "other": { "type": "int" } } },
-
   "tip_table_9_note": "×9: the sum of the digits often equals 9 (e.g., 9×4=36 → 3+6=9).",
   "tip_table_10_fmt": "×10: just append a zero. E.g., 10 × {other} = {other}0.",
   "@tip_table_10_fmt": { "placeholders": { "other": { "type": "int" } } },
@@ -152,7 +145,6 @@
 
   "players_edit_title": "Edit player",
   "save_changes": "Save changes",
-
   "players_delete_title": "Delete player",
   "players_delete_confirm_fmt": "Are you sure you want to delete '{name}'? This cannot be undone.",
   "@players_delete_confirm_fmt": { "placeholders": { "name": {} } },
@@ -170,6 +162,7 @@
 
   "settings_title": "Settings",
   "settings_body": "Coming soon:\n• Choose interface language\n• Pedagogical settings\n• Default difficulty\n",
+
   "stats_title": "Statistics",
   "refresh": "Refresh",
   "stats_no_player_hint": "No active player.\nChoose or create a player.",
@@ -186,10 +179,11 @@
   "stats_by_table": "By table",
   "stats_by_table_empty": "We don’t have per-table data yet.\nPlay a round!",
   "stats_hits_over_total_percent_fmt": "Hits: {hits}/{total} ({percent})",
-  "@stats_hits_over_total_percent_fmt": { "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} } },
+  "@stats_hits_over_total_percent_fmt": {
+    "placeholders": { "hits": { "type": "int" }, "total": { "type": "int" }, "percent": {} }
+  },
 
   "play_addition": "Addition (＋)",
-
   "add_select_title": "Train addition",
   "add_parcels_label": "Addends",
   "add_level_label": "Level",
@@ -197,14 +191,14 @@
   "add_decimal_places_label": "Places (1–9)",
   "add_play": "Play",
 
-  "add_fill_all": "Please fill all fields.",
-  "add_correct_title": "All correct!",
-  "add_feedback_ok": "Nice job! Your sum is correct.",
+  "addFillAll": "Please fill all fields.",
+  "addCorrectTitle": "All correct!",
+  "addFeedbackOk": "Nice job! Your sum is correct.",
   "add_new_problem": "New problem",
 
-  "add_incorrect_title": "Check your work",
-  "add_feedback_wrong_fmt": "At column {col}, the subtotal was {subtotal}. Expected digit is {expDigit} and carry is {expCarry}.",
-  "@add_feedback_wrong_fmt": {
+  "addIncorrectTitle": "Check your work",
+  "addFeedbackWrongFmt": "At column {col}, the subtotal was {subtotal}. Expected digit is {expDigit} and carry is {expCarry}.",
+  "@addFeedbackWrongFmt": {
     "placeholders": {
       "col": {"type": "int"},
       "subtotal": {"type": "int"},
@@ -213,33 +207,28 @@
     }
   },
 
-  "add_game_title": "Addition",
-  "add_plus_sign_hint": "The '+' sign marks addition.",
-  "add_verify": "Verify",
-
+  "addGameTitle": "Addition",
+  "addPlusSignHint": "The '+' sign marks addition.",
+  "addVerify": "Verify",
 
   "add_level_header_fmt": "Level {level} (10^{pow})",
   "@add_level_header_fmt": {
     "placeholders": { "level": { "type": "int" }, "pow": { "type": "int" } }
   },
-
-  "add_level_item_fmt": "Level {n}",
-  "@add_level_item_fmt": { "placeholders": { "n": { "type": "int" } } },
-
+  "addLevelItemFmt": "Level {n}",
+  "@addLevelItemFmt": { "placeholders": { "n": { "type": "int" } } },
   "add_level_mapping_hint": "Mapping: 1→10², 2→10³, 3→10⁴, 4→10⁵, 5→10⁶.",
-
   "add_decimals_hint": "When enabled, it always uses 2 decimal places.",
 
-  "legend_places": "Legend: u=unit, d=ten, c=hundred, k=thousand, 10k=ten-thousand, 100k=hundred-thousand, m=million, 10m=ten-million, 100m=hundred-million, b=billion.",
-  "legend_decimal_sep_fmt": "Decimal separator: \"{sep}\"",
-  "@legend_decimal_sep_fmt": { "placeholders": { "sep": {} } },
+  "legendPlaces": "Legend: u=unit, t=ten, h=hundred, th=thousand, t.th=ten-thousand, h.th=hundred-thousand, m=million, t.m=ten-million, h.m=hundred-million, b=billion.",
+  "legendDecimalSepFmt": "Decimal separator: \"{sep}\"",
+  "@legendDecimalSepFmt": { "placeholders": { "sep": {} } },
 
   "settings_theme_title": "App theme",
   "settings_theme_system": "Follow system",
   "settings_theme_light": "Light",
   "settings_theme_dark": "Dark",
-  "go_home": "Go to Home"
-  
+  "go_home": "Go to Home",
+
+  "placeAbbrevSeries": "u,t,h,th,t.th,h.th,m,t.m,h.m,b"
 }
-
-

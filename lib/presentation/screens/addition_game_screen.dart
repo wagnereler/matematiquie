@@ -12,9 +12,9 @@ import '../../domain/round_summary.dart';
 class AdditionGameScreen extends StatefulWidget {
   const AdditionGameScreen({
     super.key,
-    required this.parcels,   // 2..5
-    required this.level,     // 1..5 (mapa: 1→10^2 ... 5→10^6) → usamos apenas “Nível N” no título
-    required this.decimals,  // 0 (sem) | 2 (com 2 casas)
+    required this.parcels, // 2..5
+    required this.level, // 1..5  (mapeado para nº de dígitos = level+1)
+    required this.decimals, // 0 (sem) | 2 (com 2 casas)
   });
 
   final int parcels;
@@ -28,22 +28,24 @@ class AdditionGameScreen extends StatefulWidget {
 class _AdditionGameScreenState extends State<AdditionGameScreen> {
   final _rng = Random();
 
-  // 10 rodadas por partida
   static const int _roundTarget = 10;
   int _roundIndex = 0;
 
   late _Problem _problem;
 
-  // campos do resultado (uma caixa por coluna)
+  // inputs do resultado
   final List<TextEditingController> _resultCtrls = [];
   final List<FocusNode> _resultFocus = [];
   final List<bool> _resultWrong = [];
 
-  // campos do vai-um (começa 1 antes e termina 1 antes)
+  // inputs do "vai-um” (carry). Existem para as colunas 1..(cols-1).
   final List<TextEditingController> _carryCtrls = [];
   final List<FocusNode> _carryFocus = [];
 
-  // tentativas para o relatório final
+  // previsão de “vai-um” para mover foco automaticamente
+  late List<int> _carryToLeft;
+
+  // tentativas para tela de resultado
   final List<RoundAttempt> _attempts = [];
 
   @override
@@ -63,7 +65,6 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
 
   // ================== GERAÇÃO ==================
 
-  // mapeia o nível para quantidade de dígitos inteiros (1→10^2 ... 5→10^6)
   int _digitsFromLevel(int level) => (level + 1).clamp(2, 6);
 
   void _startNewRound() {
@@ -76,9 +77,20 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
     _clearFields();
     _allocControllers(_problem.resultCols);
 
+    // precomputar “vai-um” por coluna para pilotar o foco
+    _carryToLeft = _computeExpectedCarryToLeft();
+
+    // limpar estados de erro
     setState(() {
       for (int i = 0; i < _resultWrong.length; i++) {
         _resultWrong[i] = false;
+      }
+    });
+
+    // foco inicial: coluna das unidades (extrema direita)
+    Future.microtask(() {
+      if (_resultFocus.isNotEmpty) {
+        _resultFocus[_resultFocus.length - 1].requestFocus();
       }
     });
   }
@@ -97,16 +109,14 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
 
   void _allocControllers(int cols) {
     for (int i = 0; i < cols; i++) {
-      final ctrl = TextEditingController();
-      _resultCtrls.add(ctrl);
+      _resultCtrls.add(TextEditingController());
       _resultFocus.add(FocusNode());
       _resultWrong.add(false);
     }
-    // pré-preenche a 1ª coluna (extra à esquerda) com 0 e a manteremos “invisível”
+    // 1ª coluna (extra à esquerda) fica invisível e pré-preenchida com zero
     if (_resultCtrls.isNotEmpty) {
       _resultCtrls[0].text = '0';
     }
-
     for (int i = 0; i < cols - 1; i++) {
       _carryCtrls.add(TextEditingController());
       _carryFocus.add(FocusNode());
@@ -136,7 +146,6 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
           : _randWithDigits(nDigits);
       int fp = 0;
       if (decimals > 0) {
-        // fração aleatória (evita tudo zero)
         fp = _rng.nextInt(scale);
         anyFractionNonZero |= fp;
       }
@@ -147,7 +156,6 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
     for (int i = 0; i < parcels; i++) {
       pairs.add(_makeOne(isFirst: i == 0));
     }
-    // garante que haja ao menos uma fração não-zero quando decimais>0
     if (decimals > 0 && anyFractionNonZero == 0) {
       pairs[_rng.nextInt(parcels)][1] = _rng.nextInt(scale - 1) + 1;
     }
@@ -160,7 +168,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
 
     int digitsOf(int x) => x == 0 ? 1 : x.abs().toString().length;
 
-    // +1 coluna à esquerda no resultado
+    // +1 coluna extra à esquerda para possíveis "estouros"
     final int colsBase = max(nDigits + decimals, digitsOf(expectedSum));
     final int cols = colsBase + 1;
 
@@ -171,6 +179,27 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
       resultCols: cols,
       nDigitsBase: nDigits,
     );
+  }
+
+  // calcula quanto “sobe” para a coluna à ESQUERDA após somar a coluna j
+  List<int> _computeExpectedCarryToLeft() {
+    final cols = _problem.resultCols;
+    final addendsDigits = _problem.addends
+        .map((n) => _intToDigits(n, cols))
+        .toList();
+    final out = List<int>.filled(cols, 0);
+
+    int carry = 0;
+    for (int j = cols - 1; j >= 0; j--) {
+      int sum = carry;
+      for (final d in addendsDigits) {
+        sum += d[j];
+      }
+      final carryToLeft = sum ~/ 10;
+      out[j] = carryToLeft;
+      carry = carryToLeft;
+    }
+    return out;
   }
 
   // ================== CONTROLE ==================
@@ -185,7 +214,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
       final t = _resultCtrls[i].text.trim();
       if (t.isEmpty || int.tryParse(t) == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.add_fill_all)),
+          SnackBar(content: Text(l10n.addFillAll)),
         );
         return;
       }
@@ -223,21 +252,20 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text(l10n.add_correct_title),
-          content: Text(l10n.add_feedback_ok),
+          title: Text(l10n.addCorrectTitle),
+          content: Text(l10n.addFeedbackOk),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
                 _advanceOrFinish();
               },
-              child: Text(l10n.btn_continue),
+              child: Text(l10n.btnContinue),
             ),
           ],
         ),
       );
     } else {
-      // feedback simples da 1ª coluna errada (da direita p/ esquerda)
       final expDigits = _intToDigits(expected, _problem.resultCols);
       final usrDigits = _intToDigits(user, _problem.resultCols);
 
@@ -258,9 +286,9 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text(l10n.add_incorrect_title),
+          title: Text(l10n.addIncorrectTitle),
           content: Text(
-            l10n.add_feedback_wrong_fmt(
+            l10n.addFeedbackWrongFmt(
               wrongColFromRight == -1 ? 1 : wrongColFromRight,
               subtotal,
               expDigit,
@@ -271,9 +299,9 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
-                _advanceOrFinish(); // segue mesmo com erro
+                _advanceOrFinish();
               },
-              child: Text(l10n.btn_continue),
+              child: Text(l10n.btnContinue),
             ),
           ],
         ),
@@ -283,7 +311,6 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
 
   void _advanceOrFinish() {
     for (final c in _resultCtrls) c.clear();
-    // mantém a 1ª como ‘0’ invisível
     if (_resultCtrls.isNotEmpty) _resultCtrls[0].text = '0';
     for (final c in _carryCtrls) c.clear();
 
@@ -360,39 +387,18 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
     return ints.map(fmt).join(' + ') + ' = ?';
   }
 
-  // rótulos abreviados (m c d u ...), traduzidos
-  List<String> _placeAbbrev(BuildContext context, int n) {
-    final lang = Localizations.localeOf(context).languageCode;
-    List<String> base;
-    if (lang == 'pt') {
-      base = ['u','d','c','m','dm','cm','um','dmi','cmi','bi'];
-    } else if (lang == 'es') {
-      base = ['u','d','c','m','dm','cm','um','dmm','cmm','mil'];
-    } else {
-      base = ['u','t','h','k','10k','100k','m','10m','100m','b'];
-    }
-    return base.take(n).toList(); // retornamos na ordem do menos significativo → mais à esquerda calculamos abaixo
+  // série de rótulos vinda do l10n (ex.: "u,d,c,m,dm,cm,mi,dmi,cmi,bi")
+  List<String> _placeLabelsFromL10n(BuildContext context) {
+    final s = context.l10n.placeAbbrevSeries; // gerado a partir de place_abbrev_series
+    return s.split(',').map((e) => e.trim()).toList();
   }
 
-  String _levelWord(BuildContext context) {
-    final code = Localizations.localeOf(context).languageCode;
-    if (code == 'pt') return 'Nível';
-    if (code == 'es') return 'Nivel';
-    return 'Level';
+  String _levelHeader(BuildContext context) {
+    final l10n = context.l10n;
+    return '${l10n.addGameTitle} — ${l10n.addLevelItemFmt(widget.level)}';
   }
 
-  String _rotateTip(BuildContext context) {
-    final code = Localizations.localeOf(context).languageCode;
-    if (code == 'pt') {
-      return 'Dica: deslize para o lado ou gire o aparelho para modo paisagem.';
-    } else if (code == 'es') {
-      return 'Consejo: deslice lateralmente o gire el teléfono al modo horizontal.';
-    } else {
-      return 'Tip: swipe sideways or rotate your phone to landscape.';
-    }
-  }
-
-  // Cabeçalho “Nível N” com rótulos em cima da lousa — tudo dentro do mesmo scroller.
+  // Cabeçalho com rótulos + “lousa”
   Widget _boardWithLabels({
     required double cell,
     required bool showSep,
@@ -401,15 +407,17 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
     required String sepChar,
     required TextStyle textNum,
   }) {
-    // rótulos acima das colunas (somente inteiros: ... k h t u  .)
-    final labels = _placeAbbrev(context, _problem.nDigitsBase);
-    // índice da coluna de unidades (começando em 0 da esquerda)
-    final unitCol = cols - (_problem.decimals > 0 ? _problem.decimals + 1 : 1);
+    final labelsSeries = _placeLabelsFromL10n(context);
+
+    // índice da coluna de UNIDADES (0 da esquerda)
+    final unitCol = cols - 1 - (_problem.decimals > 0 ? _problem.decimals : 0);
 
     Widget labelsRow() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          // deslocamento para alinhar com o “+” (todas as linhas de números o têm)
+          SizedBox(width: cell),
           for (int i = 0; i < cols; i++) ...[
             if (showSep && i == sepIndexFromLeft)
               SizedBox(
@@ -429,9 +437,16 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
               height: max(16, cell * .6),
               child: Center(
                 child: Text(
-                  // rótulo apenas nas colunas inteiras (à esquerda do separador)
-                  i <= unitCol
-                      ? labels[(unitCol - i).clamp(0, labels.length - 1)]
+                  // só rotulamos as colunas INTEIRAS (à esquerda do separador)
+                  // rótulo vem da direita para a esquerda: u, d, c, m, dm...
+                  (i <= unitCol)
+                      ? (() {
+                          final distFromRight = (cols - 1) - i;
+                          if (distFromRight < labelsSeries.length) {
+                            return labelsSeries[distFromRight];
+                          }
+                          return '';
+                        })()
                       : '',
                   style: const TextStyle(
                     fontSize: 12,
@@ -484,7 +499,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
 
     Widget carryRow() => Row(
           children: [
-            SizedBox(width: cell), // começa 1 antes
+            SizedBox(width: cell), // desloca 1 coluna para a direita
             for (int i = 0; i < cols - 1; i++) ...[
               if (showSep && (i + 1) == sepIndexFromLeft)
                 SizedBox(width: max(8, cell * .25)),
@@ -502,28 +517,18 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
                     contentPadding: EdgeInsets.zero,
                     border: OutlineInputBorder(),
                   ),
+                  onChanged: (txt) {
+                    // após digitar o vai-um, seguimos para a coluna de resultado abaixo (mesmo índice+1)
+                    if (txt.length == 1) {
+                      final nextResCol = i + 1;
+                      if (nextResCol < _resultFocus.length) {
+                        _resultFocus[nextResCol].requestFocus();
+                      }
+                    }
+                  },
                 ),
               ),
             ],
-          ],
-        );
-
-    Widget addendRow(int value) => Row(
-          children: [
-            SizedBox(width: cell),
-            ..._rowDigits(value, hideFirstZero: true),
-          ],
-        );
-
-    Widget plusRow(int value) => Row(
-          children: [
-            SizedBox(
-              width: cell,
-              child: Center(
-                child: Text('+', style: textNum.copyWith(fontWeight: FontWeight.w700)),
-              ),
-            ),
-            ..._rowDigits(value, hideFirstZero: true),
           ],
         );
 
@@ -569,7 +574,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
                   maxLength: 1,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
-                  enabled: i != 0, // 1ª coluna não editável
+                  enabled: i != 0, // 1ª coluna (extra) não editável
                   style: textNum.copyWith(
                     color: i == 0
                         ? Theme.of(context).scaffoldBackgroundColor // invisível
@@ -595,8 +600,21 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
                     ),
                   ),
                   onChanged: (txt) {
-                    if (txt.length == 1 && i + 1 < _resultFocus.length) {
-                      _resultFocus[i + 1].requestFocus();
+                    if (txt.length == 1) {
+                      // preenchemos da DIREITA → ESQUERDA
+                      final j = i;
+                      final leftCol = i - 1;
+
+                      // se houver necessidade de “vai-um” após esta coluna,
+                      // focamos o campo de carry da coluna à esquerda
+                      if (leftCol >= 1 && _carryToLeft[j] > 0) {
+                        _carryFocus[leftCol - 1].requestFocus();
+                      } else if (leftCol >= 0) {
+                        // segue para a próxima coluna de resultado (à esquerda)
+                        _resultFocus[leftCol].requestFocus();
+                      } else {
+                        _resultFocus[i].unfocus();
+                      }
                     }
                   },
                 ),
@@ -614,9 +632,10 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
         SizedBox(height: max(2, cell * 0.1)),
         carryRow(),
         SizedBox(height: max(2, cell * 0.1)),
-        // números
+        // linhas dos números (todas começam com deslocamento de 1 célula para o “+”)
         Row(children: [SizedBox(width: cell), ..._rowDigits(addends[0], hideFirstZero: true)]),
-        Row(children: [SizedBox(width: cell), ..._rowDigits(addends[1], hideFirstZero: true)],),
+        if (addends.length > 1)
+          Row(children: [SizedBox(width: cell), ..._rowDigits(addends[1], hideFirstZero: true)]),
         if (addends.length > 2)
           for (int i = 2; i < addends.length; i++)
             Row(children: [SizedBox(width: cell), ..._rowDigits(addends[i], hideFirstZero: true)]),
@@ -628,50 +647,28 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
 
   // legenda padronizada (abaixo dos botões)
   String _legendPlacesText() {
-    final lang = Localizations.localeOf(context).languageCode;
+    final l10n = context.l10n;
     final sep = _decimalSep(context);
-    if (lang == 'pt') {
-      return 'Legenda: u=unidade, d=dezena, c=centena, k=milhar, '
-          '10k=dezenas de milhar, 100k=centenas de milhar, '
-          'm=milhão, 10m=dezenas de milhão, 100m=centenas de milhão, b=bilhão. '
-          'Separador decimal: "$sep".';
-    } else if (lang == 'es') {
-      return 'Leyenda: u=unidad, d=decena, c=centena, k=millar, '
-          '10k=decenas de millar, 100k=centenas de millar, '
-          'm=millón, 10m=decenas de millón, 100m=centenas de millón, b=mil millones. '
-          'Separador decimal: "$sep".';
-    } else {
-      return 'Legend: u=unit, d=ten, c=hundred, k=thousand, '
-          '10k=ten-thousand, 100k=hundred-thousand, '
-          'm=million, 10m=ten-million, 100m=hundred-million, b=billion. '
-          'Decimal separator: "$sep".';
-    }
+    return '${l10n.legendPlaces} ${l10n.legendDecimalSepFmt(sep)}';
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    final title = _levelHeader(context);
 
-    // Título com nível ao lado
-    final title = '${l10n.add_game_title} — ${_levelWord(context)} ${widget.level}';
-
-    // Cálculo responsivo do tamanho da célula/board
     final int cols = _problem.resultCols;
     final double screenW = MediaQuery.of(context).size.width;
     const double sidePadding = 16 * 2;
     final double available = max(240, screenW - sidePadding);
 
-    // espaço extra para inserir o separador decimal visual
     final bool showSep = _problem.decimals > 0;
     final int sepIndexFromLeft = showSep ? cols - _problem.decimals : -1;
     final String sepChar = showSep ? _decimalSep(context) : '';
 
-    // estimativa: cada coluna ocupa `cell` + (talvez) um slot estreito pro separador
     double cell = 44.0;
     double sepExtra = showSep ? max(8, cell * .25) : 0;
-    double boardWidth = cols * cell + sepExtra + cell; // +cell pelo sinal/offset das linhas
+    double boardWidth = cols * cell + sepExtra + cell; // +cell pelo “+”/offset
 
-    // se não couber, reduz a célula até 26; se ainda não couber, ativa rolagem horizontal
     bool needsScroll = false;
     if (boardWidth > available) {
       cell = max(26.0, min(44.0, (available - sepExtra) / (cols + 1)));
@@ -694,10 +691,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
       textNum: textNum,
     );
 
-    final boardWidget = SizedBox(
-      width: boardWidth,
-      child: boardContent,
-    );
+    final boardWidget = SizedBox(width: boardWidth, child: boardContent);
 
     return Scaffold(
       appBar: AppBar(
@@ -705,17 +699,16 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: _onCancel,
-          tooltip: l10n.btn_close,
+          tooltip: context.l10n.btnClose,
         ),
         actions: [
-          TextButton(onPressed: _onCancel, child: Text(l10n.btn_exit)),
+          TextButton(onPressed: _onCancel, child: Text(context.l10n.btnExit)),
         ],
       ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            // Lousa (com rolagem horizontal se necessário)
             Center(
               child: needsScroll
                   ? SingleChildScrollView(
@@ -730,8 +723,6 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
                       child: boardWidget,
                     ),
             ),
-
-            // Dica de orientação (aparece só quando houver rolagem)
             if (needsScroll) ...[
               const SizedBox(height: 8),
               Row(
@@ -741,16 +732,19 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
                   const SizedBox(width: 6),
                   Flexible(
                     child: Text(
-                      _rotateTip(context),
+                      // simples e neutro nas três línguas
+                      Localizations.localeOf(context).languageCode == 'pt'
+                          ? 'Dica: gire o aparelho para paisagem se preferir.'
+                          : (Localizations.localeOf(context).languageCode == 'es'
+                              ? 'Consejo: gira el teléfono a horizontal si prefieres.'
+                              : 'Tip: rotate your phone to landscape if you prefer.'),
                       style: const TextStyle(fontSize: 12, color: Colors.black45),
                     ),
                   ),
                 ],
               ),
             ],
-
             const SizedBox(height: 16),
-
             Row(
               children: [
                 Expanded(
@@ -763,7 +757,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    label: Text(l10n.add_verify),
+                    label: Text(context.l10n.addVerify),
                   ),
                 ),
               ],
@@ -772,7 +766,7 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
             OutlinedButton.icon(
               icon: const Icon(Icons.close),
               onPressed: _onCancel,
-              label: Text(l10n.btn_close),
+              label: Text(context.l10n.btnClose),
             ),
             const SizedBox(height: 8),
             Center(
@@ -782,15 +776,11 @@ class _AdditionGameScreenState extends State<AdditionGameScreen> {
               ),
             ),
             const SizedBox(height: 12),
-
-            // Frase informativa do sinal + (agora sempre embaixo)
             Text(
-              l10n.add_plus_sign_hint,
+              context.l10n.addPlusSignHint,
               style: const TextStyle(fontSize: 12, color: Colors.black54),
             ),
             const SizedBox(height: 8),
-
-            // Legenda padronizada (abaixo dos botões)
             Text(
               _legendPlacesText(),
               style: const TextStyle(fontSize: 13, height: 1.35, color: Colors.black54),
@@ -813,9 +803,9 @@ class _Problem {
     required this.nDigitsBase,
   });
 
-  final List<int> addends;   // inteiros escalados por 10^decimals
-  final int decimals;        // 0 | 2
-  final int expected;        // soma escalada
-  final int resultCols;      // colunas (com +1 à esquerda)
-  final int nDigitsBase;     // dígitos inteiros (antes do separador)
+  final List<int> addends; // inteiros escalados por 10^decimals
+  final int decimals; // 0 | 2
+  final int expected; // soma escalada
+  final int resultCols; // colunas (+1 extra à esquerda)
+  final int nDigitsBase; // dígitos inteiros antes do separador
 }

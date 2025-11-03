@@ -128,13 +128,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get summary_label => 'Resumo';
 
   @override
-  String get btn_continue => 'Continuar';
+  String get btnContinue => 'Continuar';
 
   @override
-  String get btn_close => 'Fechar';
+  String get btnClose => 'Fechar';
 
   @override
-  String get btn_exit => 'Sair';
+  String get btnExit => 'Sair';
 
   @override
   String get btn_see_hint => 'Ver dica';
@@ -438,33 +438,33 @@ class AppLocalizationsPt extends AppLocalizations {
   String get add_play => 'Jogar';
 
   @override
-  String get add_fill_all => 'Preencha todos os campos.';
+  String get addFillAll => 'Preencha todos os campos.';
 
   @override
-  String get add_correct_title => 'Tudo certo!';
+  String get addCorrectTitle => 'Tudo certo!';
 
   @override
-  String get add_feedback_ok => 'Parabéns! Sua soma está correta.';
+  String get addFeedbackOk => 'Parabéns! Sua soma está correta.';
 
   @override
   String get add_new_problem => 'Novo desafio';
 
   @override
-  String get add_incorrect_title => 'Confira sua conta';
+  String get addIncorrectTitle => 'Confira sua conta';
 
   @override
-  String add_feedback_wrong_fmt(int col, int subtotal, int expDigit, int expCarry) {
+  String addFeedbackWrongFmt(int col, int subtotal, int expDigit, int expCarry) {
     return 'Na coluna $col, o subtotal foi $subtotal. O dígito esperado é $expDigit e o vai-um (excedente) é $expCarry.';
   }
 
   @override
-  String get add_game_title => 'Adição';
+  String get addGameTitle => 'Adição';
 
   @override
-  String get add_plus_sign_hint => 'O sinal \'+\' identifica que é uma adição.';
+  String get addPlusSignHint => 'O sinal \'+\' identifica que é uma adição.';
 
   @override
-  String get add_verify => 'Verificar';
+  String get addVerify => 'Verificar';
 
   @override
   String add_level_header_fmt(int level, int pow) {
@@ -472,7 +472,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String add_level_item_fmt(int n) {
+  String addLevelItemFmt(int n) {
     return 'Nível $n';
   }
 
@@ -483,10 +483,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get add_decimals_hint => 'Ao ativar, sempre usa 2 casas decimais.';
 
   @override
-  String get legend_places => 'Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, um=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.';
+  String get legendPlaces => 'Legenda: u=unidade, d=dezena, c=centena, m=milhar, dm=dezenas de milhar, cm=centenas de milhar, mi=unidade de milhão, dmi=dezenas de milhão, cmi=centenas de milhão, bi=bilhão.';
 
   @override
-  String legend_decimal_sep_fmt(Object sep) {
+  String legendDecimalSepFmt(Object sep) {
     return 'Separador decimal: \"$sep\"';
   }
 
@@ -504,4 +504,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get go_home => 'Ir para a Home';
+
+  @override
+  String get placeAbbrevSeries => 'u,d,c,m,dm,cm,mi,dmi,cmi,bi';
 }

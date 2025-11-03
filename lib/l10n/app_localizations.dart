@@ -319,23 +319,23 @@ abstract class AppLocalizations {
   /// **'Summary'**
   String get summary_label;
 
-  /// No description provided for @btn_continue.
+  /// No description provided for @btnContinue.
   ///
   /// In en, this message translates to:
   /// **'Continue'**
-  String get btn_continue;
+  String get btnContinue;
 
-  /// No description provided for @btn_close.
+  /// No description provided for @btnClose.
   ///
   /// In en, this message translates to:
   /// **'Close'**
-  String get btn_close;
+  String get btnClose;
 
-  /// No description provided for @btn_exit.
+  /// No description provided for @btnExit.
   ///
   /// In en, this message translates to:
   /// **'Exit'**
-  String get btn_exit;
+  String get btnExit;
 
   /// No description provided for @btn_see_hint.
   ///
@@ -859,23 +859,23 @@ abstract class AppLocalizations {
   /// **'Play'**
   String get add_play;
 
-  /// No description provided for @add_fill_all.
+  /// No description provided for @addFillAll.
   ///
   /// In en, this message translates to:
   /// **'Please fill all fields.'**
-  String get add_fill_all;
+  String get addFillAll;
 
-  /// No description provided for @add_correct_title.
+  /// No description provided for @addCorrectTitle.
   ///
   /// In en, this message translates to:
   /// **'All correct!'**
-  String get add_correct_title;
+  String get addCorrectTitle;
 
-  /// No description provided for @add_feedback_ok.
+  /// No description provided for @addFeedbackOk.
   ///
   /// In en, this message translates to:
   /// **'Nice job! Your sum is correct.'**
-  String get add_feedback_ok;
+  String get addFeedbackOk;
 
   /// No description provided for @add_new_problem.
   ///
@@ -883,35 +883,35 @@ abstract class AppLocalizations {
   /// **'New problem'**
   String get add_new_problem;
 
-  /// No description provided for @add_incorrect_title.
+  /// No description provided for @addIncorrectTitle.
   ///
   /// In en, this message translates to:
   /// **'Check your work'**
-  String get add_incorrect_title;
+  String get addIncorrectTitle;
 
-  /// No description provided for @add_feedback_wrong_fmt.
+  /// No description provided for @addFeedbackWrongFmt.
   ///
   /// In en, this message translates to:
   /// **'At column {col}, the subtotal was {subtotal}. Expected digit is {expDigit} and carry is {expCarry}.'**
-  String add_feedback_wrong_fmt(int col, int subtotal, int expDigit, int expCarry);
+  String addFeedbackWrongFmt(int col, int subtotal, int expDigit, int expCarry);
 
-  /// No description provided for @add_game_title.
+  /// No description provided for @addGameTitle.
   ///
   /// In en, this message translates to:
   /// **'Addition'**
-  String get add_game_title;
+  String get addGameTitle;
 
-  /// No description provided for @add_plus_sign_hint.
+  /// No description provided for @addPlusSignHint.
   ///
   /// In en, this message translates to:
   /// **'The \'+\' sign marks addition.'**
-  String get add_plus_sign_hint;
+  String get addPlusSignHint;
 
-  /// No description provided for @add_verify.
+  /// No description provided for @addVerify.
   ///
   /// In en, this message translates to:
   /// **'Verify'**
-  String get add_verify;
+  String get addVerify;
 
   /// No description provided for @add_level_header_fmt.
   ///
@@ -919,11 +919,11 @@ abstract class AppLocalizations {
   /// **'Level {level} (10^{pow})'**
   String add_level_header_fmt(int level, int pow);
 
-  /// No description provided for @add_level_item_fmt.
+  /// No description provided for @addLevelItemFmt.
   ///
   /// In en, this message translates to:
   /// **'Level {n}'**
-  String add_level_item_fmt(int n);
+  String addLevelItemFmt(int n);
 
   /// No description provided for @add_level_mapping_hint.
   ///
@@ -937,17 +937,17 @@ abstract class AppLocalizations {
   /// **'When enabled, it always uses 2 decimal places.'**
   String get add_decimals_hint;
 
-  /// No description provided for @legend_places.
+  /// No description provided for @legendPlaces.
   ///
   /// In en, this message translates to:
-  /// **'Legend: u=unit, d=ten, c=hundred, k=thousand, 10k=ten-thousand, 100k=hundred-thousand, m=million, 10m=ten-million, 100m=hundred-million, b=billion.'**
-  String get legend_places;
+  /// **'Legend: u=unit, t=ten, h=hundred, th=thousand, t.th=ten-thousand, h.th=hundred-thousand, m=million, t.m=ten-million, h.m=hundred-million, b=billion.'**
+  String get legendPlaces;
 
-  /// No description provided for @legend_decimal_sep_fmt.
+  /// No description provided for @legendDecimalSepFmt.
   ///
   /// In en, this message translates to:
   /// **'Decimal separator: \"{sep}\"'**
-  String legend_decimal_sep_fmt(Object sep);
+  String legendDecimalSepFmt(Object sep);
 
   /// No description provided for @settings_theme_title.
   ///
@@ -978,6 +978,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to Home'**
   String get go_home;
+
+  /// No description provided for @placeAbbrevSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'u,t,h,th,t.th,h.th,m,t.m,h.m,b'**
+  String get placeAbbrevSeries;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
